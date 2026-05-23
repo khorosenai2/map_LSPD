@@ -11,14 +11,24 @@ const elemFill = document.getElementById('elemFill');
 const itemsList = document.getElementById('itemsList');
 const legendList = document.getElementById('legendList');
 const clearAllBtn = document.getElementById('clearAllBtn');
-const downloadJsonBtn = document.getElementById('downloadJsonBtn');
-const jsonImporter = document.getElementById('jsonImporter');
 
+
+const downloadJsonBtn = document.getElementById('downloadJsonBtn');
+const saveElementBtn = document.getElementById('saveElementBtn');
+
+const jsonImporter = document.getElementById('jsonImporter');
 const previewModal = document.getElementById('previewModal');
 const jsonPreviewArea = document.getElementById('jsonPreviewArea');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const copyCodeBtn = document.getElementById('copyCodeBtn');
 const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
+
+const toolSectionTitle = document.getElementById('toolSectionTitle');
+const normalToolGrid = document.getElementById('normalToolGrid');
+const editTypeContainer = document.getElementById('editTypeContainer');
+const editElemType = document.getElementById('editElemType');
+const shapeWarning = document.getElementById('shapeWarning');
+const autosaveToast = document.getElementById('autosaveToast');
 
 let editMode = false;
 let selectedTool = 'marker';
@@ -33,6 +43,7 @@ let pinnedSubCategories = new Set();
 let currentOverlayLayer = null;
 
 let editingFeatureId = null; 
+let tempEditingType = null;
 
 const mapWidth = 8192;
 const mapHeight = 8192;
@@ -75,11 +86,29 @@ async function loadDefaultMarkers() {
             savedFeatures = await response.json();
             renderFeatures();
         }
-    } catch (e) {
-        console.log("Fichier markers.json par défaut introuvable.");
-    }
+    } catch (e) {}
 }
 loadDefaultMarkers();
+
+function triggerJsonDownload() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedFeatures, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "markers.json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+setInterval(() => {
+    if (savedFeatures.length > 0) {
+        triggerJsonDownload();
+        autosaveToast.classList.add('show');
+        setTimeout(() => {
+            autosaveToast.classList.remove('show');
+        }, 3500);
+    }
+}, 2 * 60 * 1000);
 
 jsonImporter.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -103,12 +132,12 @@ jsonImporter.addEventListener('change', (e) => {
     reader.readAsText(file);
 });
 
+
 downloadJsonBtn.addEventListener('click', () => {
     if (savedFeatures.length === 0) {
         alert("frero y'a rien sur la map tu veux save quoi ?");
         return;
     }
-
     const jsonString = JSON.stringify(savedFeatures, null, 2);
     jsonPreviewArea.value = `Si tu modifie envoie moi le json pour que je change le truc :)\n\n${jsonString}`;
     previewModal.classList.add('active');
@@ -125,13 +154,7 @@ copyCodeBtn.addEventListener('click', () => {
 });
 
 confirmDownloadBtn.addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedFeatures, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "markers.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+    triggerJsonDownload();
     previewModal.classList.remove('active');
 });
 
@@ -197,6 +220,7 @@ function startEditFeature(id) {
     if (!feat) return;
 
     editingFeatureId = id;
+    tempEditingType = feat.type;
     
     elemTitle.value = feat.title;
     elemDesc.value = feat.desc || '';
@@ -205,16 +229,37 @@ function startEditFeature(id) {
     elemColor.value = feat.color || '#2563eb';
     if (feat.fill) elemFill.value = feat.fill;
 
-    toolButtons.forEach(b => b.classList.add('disabled'));
+    toolSectionTitle.textContent = "Modification de la forme";
+    normalToolGrid.style.display = 'none';
+    editTypeContainer.style.display = 'block';
+    editElemType.value = feat.type;
 
-    downloadJsonBtn.textContent = "Enregistrer l'élément";
-    downloadJsonBtn.style.background = "#10b981";
+    manageShapeWarningVisibility(feat.type);
+
+
+    downloadJsonBtn.style.display = 'none';
+    saveElementBtn.style.display = 'block';
 
     clearAllBtn.textContent = "Annuler";
     clearAllBtn.classList.remove('btn-danger');
     clearAllBtn.classList.add('btn-secondary');
 
+    resetDrawState();
     elemTitle.focus();
+}
+
+editElemType.addEventListener('change', (e) => {
+    tempEditingType = e.target.value;
+    manageShapeWarningVisibility(tempEditingType);
+    resetDrawState();
+});
+
+function manageShapeWarningVisibility(type) {
+    if (type === 'rectangle' || type === 'circle' || type === 'polygon') {
+        shapeWarning.style.display = 'block';
+    } else {
+        shapeWarning.style.display = 'none';
+    }
 }
 
 function saveFeatureChanges() {
@@ -222,13 +267,32 @@ function saveFeatureChanges() {
 
     const index = savedFeatures.findIndex(f => f.id === editingFeatureId);
     if (index !== -1) {
-        savedFeatures[index].title = elemTitle.value.trim() || 'Élément sans nom';
-        savedFeatures[index].desc = elemDesc.value.trim() || '';
-        savedFeatures[index].category = elemCategory.value.trim() || 'Général';
-        savedFeatures[index].subcategory = elemSubCategory.value.trim() || 'Général';
-        savedFeatures[index].color = elemColor.value;
-        if (savedFeatures[index].fill) {
-            savedFeatures[index].fill = elemFill.value;
+        const oldFeat = savedFeatures[index];
+        
+        oldFeat.title = elemTitle.value.trim() || 'Élément sans nom';
+        oldFeat.desc = elemDesc.value.trim() || '';
+        oldFeat.category = elemCategory.value.trim() || 'Général';
+        oldFeat.subcategory = elemSubCategory.value.trim() || 'Général';
+        oldFeat.color = elemColor.value;
+        oldFeat.fill = elemFill.value;
+
+        if (oldFeat.type !== tempEditingType) {
+            oldFeat.type = tempEditingType;
+            
+            if (tempEditingType === 'marker' || tempEditingType === 'candy' || tempEditingType === 'bunker') {
+                if (!firstClickLatLng) {
+                    if (oldFeat.latlng) {}
+                    else if (oldFeat.bounds) { oldFeat.latlng = L.latLngBounds(oldFeat.bounds).getCenter(); }
+                    else if (oldFeat.latlngs) { oldFeat.latlng = L.polygon(oldFeat.latlngs).getBounds().getCenter(); }
+                    
+                    if (oldFeat.latlng && oldFeat.latlng.lat) {
+                        oldFeat.latlng = [parseFloat(oldFeat.latlng.lat.toFixed(2)), parseFloat(oldFeat.latlng.lng.toFixed(2))];
+                    }
+                }
+                delete oldFeat.bounds;
+                delete oldFeat.latlngs;
+                delete oldFeat.radius;
+            } 
         }
     }
 
@@ -237,38 +301,105 @@ function saveFeatureChanges() {
     resetForm();
 }
 
+saveElementBtn.addEventListener('click', () => {
+    saveFeatureChanges();
+});
+
 function exitEditFeatureMode() {
     editingFeatureId = null;
-    toolButtons.forEach(b => b.classList.remove('disabled'));
-    downloadJsonBtn.textContent = "Télécharger JSON";
-    downloadJsonBtn.style.background = "#2563eb";
+    tempEditingType = null;
+    
+    toolSectionTitle.textContent = "Outils de dessin";
+    normalToolGrid.style.display = 'grid';
+    editTypeContainer.style.display = 'none';
+    shapeWarning.style.display = 'none';
+
+
+    downloadJsonBtn.style.display = 'block';
+    saveElementBtn.style.display = 'none';
     
     clearAllBtn.textContent = "Vider";
     clearAllBtn.classList.add('btn-danger');
     clearAllBtn.classList.remove('btn-secondary');
 }
 
+const inputsToWatch = [elemTitle, elemDesc, elemCategory, elemSubCategory, elemColor, elemFill, editElemType];
+inputsToWatch.forEach(input => {
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault(); 
+                if (editingFeatureId) {
+                    saveFeatureChanges(); 
+                }
+            }
+        });
+    }
+});
+
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        if (editingFeatureId) {
-            saveFeatureChanges();
-        } else {
-            finishPolygonDrawing();
-        }
-    } 
-    else if (e.key === 'Escape') {
+    if (e.key === 'Escape') {
         if (editingFeatureId) {
             exitEditFeatureMode();
             resetForm();
         } else if (editMode && (firstClickLatLng || polygonPoints.length > 0)) {
             resetDrawState();
-            console.log("Tracé annulé avec Échap");
         }
     }
 });
 
 map.on('click', (e) => {
-    if (!editMode || editingFeatureId) return; 
+    if (!editMode) return; 
+
+    const pt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
+
+    if (editingFeatureId) {
+        const index = savedFeatures.findIndex(f => f.id === editingFeatureId);
+        if (index === -1) return;
+
+        const targetType = tempEditingType;
+        const color = elemColor.value;
+        const fill = elemFill.value;
+
+        if (targetType === 'marker' || targetType === 'candy' || targetType === 'bunker') {
+            savedFeatures[index].latlng = pt;
+            saveFeatureChanges();
+        }
+        else if (targetType === 'rectangle') {
+            if (!firstClickLatLng) {
+                firstClickLatLng = e.latlng;
+                tempDrawLayer = L.rectangle([firstClickLatLng, firstClickLatLng], { color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
+            } else {
+                savedFeatures[index].bounds = [
+                    [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))],
+                    pt
+                ];
+                saveFeatureChanges();
+            }
+        }
+        else if (targetType === 'circle') {
+            if (!firstClickLatLng) {
+                firstClickLatLng = e.latlng;
+                tempDrawLayer = L.circle(firstClickLatLng, { radius: 0, color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
+            } else {
+                const dx = e.latlng.lng - firstClickLatLng.lng;
+                const dy = e.latlng.lat - firstClickLatLng.lat;
+                const radius = parseFloat(Math.sqrt(dx * dx + dy * dy).toFixed(2));
+                savedFeatures[index].latlng = [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))];
+                savedFeatures[index].radius = radius;
+                saveFeatureChanges();
+            }
+        }
+        else if (targetType === 'polygon') {
+            polygonPoints.push(pt);
+            if (polygonPoints.length === 1) {
+                tempDrawLayer = L.polygon([pt, pt], { color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
+            } else {
+                tempDrawLayer.setLatLngs([...polygonPoints, pt]);
+            }
+        }
+        return;
+    }
 
     const title = elemTitle.value.trim() || 'Élément sans nom';
     const desc = elemDesc.value.trim() || '';
@@ -276,8 +407,6 @@ map.on('click', (e) => {
     const subcategory = elemSubCategory.value.trim() || 'Général';
     const color = elemColor.value;
     const fill = elemFill.value;
-
-    const pt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
 
     if (selectedTool === 'marker' || selectedTool === 'candy' || selectedTool === 'bunker') {
         savedFeatures.push({
@@ -336,22 +465,34 @@ map.on('click', (e) => {
 });
 
 map.on('mousemove', (e) => {
-    if (!editMode || !tempDrawLayer || editingFeatureId) return;
-    if (selectedTool === 'rectangle' && firstClickLatLng) {
+    if (!editMode || !tempDrawLayer) return;
+    
+    const currentType = editingFeatureId ? tempEditingType : selectedTool;
+
+    if (currentType === 'rectangle' && firstClickLatLng) {
         tempDrawLayer.setBounds([firstClickLatLng, e.latlng]);
-    } else if (selectedTool === 'circle' && firstClickLatLng) {
+    } else if (currentType === 'circle' && firstClickLatLng) {
         const dx = e.latlng.lng - firstClickLatLng.lng;
         const dy = e.latlng.lat - firstClickLatLng.lat;
         const radius = Math.sqrt(dx * dx + dy * dy);
         tempDrawLayer.setRadius(radius);
-    } else if (selectedTool === 'polygon' && polygonPoints.length > 0) {
+    } else if (currentType === 'polygon' && polygonPoints.length > 0) {
         const mousePt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
         tempDrawLayer.setLatLngs([...polygonPoints, mousePt]);
     }
 });
 
 map.on('dblclick', (e) => {
-    if (editingFeatureId) return;
+    if (editingFeatureId) {
+        if (tempEditingType === 'polygon' && polygonPoints.length >= 2) {
+            const index = savedFeatures.findIndex(f => f.id === editingFeatureId);
+            if (index !== -1) {
+                savedFeatures[index].latlngs = [...polygonPoints];
+                saveFeatureChanges();
+            }
+        }
+        return;
+    }
     finishPolygonDrawing();
 });
 
@@ -376,13 +517,6 @@ clearAllBtn.addEventListener('click', () => {
     if (confirm('Voulez-vous effacer tous les éléments actuellement affichés ?')) {
         savedFeatures = [];
         renderFeatures();
-    }
-});
-
-downloadJsonBtn.addEventListener('click', (e) => {
-    if (editingFeatureId) {
-        e.stopImmediatePropagation();
-        saveFeatureChanges();
     }
 });
 
@@ -425,9 +559,9 @@ function renderFeatures() {
             deleteFeature(feat.id);
         });
         itemRow.addEventListener('click', () => {
-            if (feat.type === 'rectangle') map.fitBounds(feat.bounds);
-            else if (feat.type === 'polygon') map.fitBounds(feat.latlngs);
-            else map.setView(feat.latlng, map.getZoom());
+            if (feat.type === 'rectangle' && feat.bounds) map.fitBounds(feat.bounds);
+            else if (feat.type === 'polygon' && feat.latlngs) map.fitBounds(feat.latlngs);
+            else if (feat.latlng) map.setView(feat.latlng, map.getZoom());
         });
         itemsList.appendChild(itemRow);
 
@@ -436,7 +570,7 @@ function renderFeatures() {
         let layer;
         const content = `<div><h3>${feat.title}</h3>${feat.desc ? `<p>${feat.desc}</p>` : ''}<small style="color:#64748b;display:block;margin-top:4px;">Catégorie: ${cat} | ${sub}</small></div>`;
 
-        if (feat.type === 'marker') {
+        if (feat.type === 'marker' && feat.latlng) {
             const customIcon = L.divIcon({
                 className: 'custom-div-marker',
                 html: `<svg width="24" height="24" viewBox="0 0 24 24" fill="${feat.color}" stroke="#000" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>`,
@@ -446,32 +580,32 @@ function renderFeatures() {
             });
             layer = L.marker(feat.latlng, { icon: customIcon });
         } 
-        else if (feat.type === 'candy') {
-            const drogueIcon = L.icon({
+        else if (feat.type === 'candy' && feat.latlng) {
+            const candyIcon = L.icon({
                 iconUrl: 'drogue.jpg',
-                iconSize: [40, 40],
-                iconAnchor: [30, 30],
+                iconSize: [24, 24],
+                iconAnchor: [12, 12],
                 popupAnchor: [0, -12]
             });
-            layer = L.marker(feat.latlng, { icon: drogueIcon });
+            layer = L.marker(feat.latlng, { icon: candyIcon });
         }
-        else if (feat.type === 'bunker') {
+        else if (feat.type === 'bunker' && feat.latlng) {
             const bunkerIcon = L.icon({
                 iconUrl: 'bunker.jpg',
-                iconSize: [50, 50],
-                iconAnchor: [30, 30],
-                popupAnchor: [0, -12],
+                iconSize: [40, 40],
+                iconAnchor: [20, 20],
+                popupAnchor: [0, -20],
                 className: 'bunker-custom-icon'
             });
             layer = L.marker(feat.latlng, { icon: bunkerIcon });
         }
-        else if (feat.type === 'rectangle') {
+        else if (feat.type === 'rectangle' && feat.bounds) {
             layer = L.rectangle(feat.bounds, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         } 
-        else if (feat.type === 'circle') {
-            layer = L.circle(feat.latlng, { radius: feat.radius, color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
+        else if (feat.type === 'circle' && feat.latlng) {
+            layer = L.circle(feat.latlng, { radius: feat.radius || 10, color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         }
-        else if (feat.type === 'polygon') {
+        else if (feat.type === 'polygon' && feat.latlngs) {
             layer = L.polygon(feat.latlngs, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         }
 
@@ -481,18 +615,20 @@ function renderFeatures() {
 
             if (isTitlePinned) {
                 let labelLatLng = feat.latlng;
-                if (feat.type === 'rectangle') {
+                if (feat.type === 'rectangle' && feat.bounds) {
                     labelLatLng = L.latLngBounds(feat.bounds).getCenter();
-                } else if (feat.type === 'polygon') {
+                } else if (feat.type === 'polygon' && feat.latlngs) {
                     labelLatLng = L.polygon(feat.latlngs).getBounds().getCenter();
                 }
                 
-                layer.bindTooltip(`<div class="permanent-label-content" style="color: ${feat.color}">${feat.title}</div>`, {
-                    permanent: true,
-                    direction: 'top',
-                    className: 'permanent-map-label',
-                    offset: (feat.type === 'marker' || feat.type === 'candy' || feat.type === 'bunker') ? [0, -15] : [0, 0]
-                }).addTo(map);
+                if (labelLatLng) {
+                    layer.bindTooltip(`<div class="permanent-label-content" style="color: ${feat.color}">${feat.title}</div>`, {
+                        permanent: true,
+                        direction: 'top',
+                        className: 'permanent-map-label',
+                        offset: (feat.type === 'marker' || feat.type === 'candy' || feat.type === 'bunker') ? [0, -15] : [0, 0]
+                    }).addTo(map);
+                }
             }
         }
     });
@@ -621,7 +757,7 @@ searchInput.addEventListener('input', () => {
         item.addEventListener('click', () => {
             if (feat.type === 'rectangle' || feat.type === 'polygon') {
                 map.fitBounds(feat.bounds || feat.latlngs);
-            } else {
+            } else if (feat.latlng) {
                 map.setView(feat.latlng, 0);
             }
 
