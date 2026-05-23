@@ -103,9 +103,7 @@ downloadJsonBtn.addEventListener('click', () => {
     }
 
     const jsonString = JSON.stringify(savedFeatures, null, 2);
-    
-    jsonPreviewArea.value = `Si tu modifie envoie moi le json pour que je change le truc :)\n// Aperçu avant export final\n\n${jsonString}`;
-    
+    jsonPreviewArea.value = `Si tu modifie envoie moi le json pour que je change le truc :)\n\n${jsonString}`;
     previewModal.classList.add('active');
 });
 
@@ -318,3 +316,78 @@ function renderLegend(categoriesList) {
         legendList.appendChild(legItem);
     });
 }
+
+const searchContainer = document.getElementById('searchContainer');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchResults = document.getElementById('searchResults');
+
+searchBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    searchContainer.classList.toggle('open');
+    if (searchContainer.classList.contains('open')) {
+        searchInput.focus();
+    } else {
+        searchInput.value = '';
+        searchResults.classList.remove('active');
+    }
+});
+
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    searchResults.innerHTML = '';
+
+    if (query === '') {
+        searchResults.classList.remove('active');
+        return;
+    }
+
+    const matches = savedFeatures.filter(feat => 
+        feat.title.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-item" style="color: #64748b; cursor: default;">Aucun résultat</div>';
+        searchResults.classList.add('active');
+        return;
+    }
+
+    matches.forEach(feat => {
+        const item = document.createElement('div');
+        item.className = 'search-item';
+        item.innerHTML = `<strong style="color: ${feat.color || '#2563eb'}">${feat.title}</strong> <span style="color: #64748b; font-size:10px;">(${feat.category})</span>`;
+        
+        item.addEventListener('click', () => {
+            if (feat.type === 'rectangle') {
+                map.fitBounds(feat.bounds);
+            } else {
+                map.setView(feat.latlng, 0);
+            }
+
+            activeLayers.forEach(layer => {
+                if (layer.getPopup()) {
+                    const content = layer.getPopup().getContent();
+                    if (content.includes(`<h3>${feat.title}</h3>`)) {
+                        layer.openPopup();
+                    }
+                }
+            });
+
+            searchResults.classList.remove('active');
+            searchInput.value = '';
+            searchContainer.classList.remove('open');
+        });
+
+        searchResults.appendChild(item);
+    });
+
+    searchResults.classList.add('active');
+});
+
+document.addEventListener('click', (e) => {
+    if (!searchContainer.contains(e.target)) {
+        searchContainer.classList.remove('open');
+        searchResults.classList.remove('active');
+        searchInput.value = '';
+    }
+});
