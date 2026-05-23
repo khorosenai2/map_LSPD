@@ -29,7 +29,7 @@ let firstClickLatLng = null;
 let polygonPoints = [];
 let hiddenCategories = new Set();
 let hiddenSubCategories = new Set();
-let pinnedSubCategories = new Set(); 
+let pinnedSubCategories = new Set(); // Stocke les clés "Catégorie:Sous-Catégorie" dont les titres sont affichés fixement
 let currentOverlayLayer = null;
 
 let editingFeatureId = null; 
@@ -470,7 +470,7 @@ function renderFeatures() {
             layer.bindPopup(content).addTo(map);
             activeLayers.push(layer);
 
-          
+            // Si la sous-catégorie demande un affichage de titre permanent
             if (isTitlePinned) {
                 let labelLatLng = feat.latlng;
                 if (feat.type === 'rectangle') {
@@ -542,7 +542,7 @@ function renderLegend(hierarchy) {
                 renderFeatures();
             });
 
-            
+            // Petit bouton d'épinglage du texte fixe sur la map
             const pinBtn = document.createElement('span');
             pinBtn.className = `pin-title-btn ${isPinned ? 'pinned' : ''}`;
             pinBtn.textContent = '📌';
