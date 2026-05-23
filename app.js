@@ -98,7 +98,7 @@ jsonImporter.addEventListener('change', (e) => {
 
 downloadJsonBtn.addEventListener('click', () => {
     if (savedFeatures.length === 0) {
-        alert("Rien à sauvegarder ! Crée d'abord des éléments sur la carte.");
+        alert("frero y'a rien sur la map tu veux save quoi ?");
         return;
     }
 
