@@ -5,6 +5,7 @@ const viewButtons = document.querySelectorAll('.view-btn');
 const elemTitle = document.getElementById('elemTitle');
 const elemDesc = document.getElementById('elemDesc');
 const elemCategory = document.getElementById('elemCategory');
+const elemSubCategory = document.getElementById('elemSubCategory');
 const elemColor = document.getElementById('elemColor');
 const elemFill = document.getElementById('elemFill');
 const itemsList = document.getElementById('itemsList');
@@ -25,8 +26,13 @@ let savedFeatures = [];
 let activeLayers = [];
 let tempDrawLayer = null;
 let firstClickLatLng = null;
+let polygonPoints = [];
 let hiddenCategories = new Set();
+let hiddenSubCategories = new Set();
 let currentOverlayLayer = null;
+
+// Variables pour la modification d'éléments existants
+let editingFeatureId = null; 
 
 const mapWidth = 8192;
 const mapHeight = 8192;
@@ -36,7 +42,8 @@ const map = L.map('map', {
     minZoom: -3,
     maxZoom: 1,
     zoomControl: false,
-    attributionControl: false
+    attributionControl: false,
+    doubleClickZoom: false
 });
 
 L.control.zoom({
@@ -87,7 +94,7 @@ jsonImporter.addEventListener('change', (e) => {
                 renderFeatures();
                 alert("Fichier JSON chargé avec succès !");
             } else {
-                alert("Erreur : Le fichier doit être une liste de repères valide [ ... ].");
+                alert("Erreur : Le fichier doit être une liste de repères valide.");
             }
         } catch (err) {
             alert("Erreur lors de la lecture du JSON. Vérifie sa syntaxe.");
@@ -140,11 +147,15 @@ controlTrigger.addEventListener('click', () => {
     editMode = !editMode;
     controlTrigger.classList.toggle('active', editMode);
     editorPanel.classList.toggle('open', editMode);
-    if (!editMode) resetDrawState();
+    if (!editMode) {
+        resetDrawState();
+        exitEditFeatureMode();
+    }
 });
 
 toolButtons.forEach(btn => {
     btn.addEventListener('click', () => {
+        if (editingFeatureId) return; // Interdit de changer d'outil pendant la modification d'un ancien point
         toolButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedTool = btn.getAttribute('data-type');
@@ -158,23 +169,130 @@ function resetDrawState() {
         tempDrawLayer = null;
     }
     firstClickLatLng = null;
+    polygonPoints = [];
 }
 
-map.on('click', (e) => {
-    if (!editMode) return;
+function finishPolygonDrawing() {
+    if (!editMode || selectedTool !== 'polygon' || polygonPoints.length < 2) return;
 
     const title = elemTitle.value.trim() || 'Élément sans nom';
     const desc = elemDesc.value.trim() || '';
     const category = elemCategory.value.trim() || 'Général';
+    const subcategory = elemSubCategory.value.trim() || 'Général';
     const color = elemColor.value;
     const fill = elemFill.value;
+
+    savedFeatures.push({
+        id: Date.now(),
+        type: 'polygon',
+        latlngs: [...polygonPoints],
+        title, desc, category, subcategory, color, fill
+    });
+    renderFeatures();
+    resetForm();
+}
+
+// Activer le mode modification sur une ancienne forme/point
+function startEditFeature(id) {
+    const feat = savedFeatures.find(f => f.id === id);
+    if (!feat) return;
+
+    editingFeatureId = id;
+    
+    // Remplir le formulaire avec les anciennes valeurs
+    elemTitle.value = feat.title;
+    elemDesc.value = feat.desc || '';
+    elemCategory.value = feat.category || 'Général';
+    elemSubCategory.value = feat.subcategory || 'Général';
+    elemColor.value = feat.color || '#2563eb';
+    if (feat.fill) elemFill.value = feat.fill;
+
+    // Bloquer les boutons d'outils de dessin pour éviter les conflits
+    toolButtons.forEach(b => b.classList.add('disabled'));
+
+    // Modifier le bouton de téléchargement pour en faire le bouton de sauvegarde de la modif
+    downloadJsonBtn.textContent = "Enregistrer l'élément";
+    downloadJsonBtn.style.background = "#10b981"; // Couleur verte de confirmation
+
+    // Transformer le bouton Vider en bouton d'annulation
+    clearAllBtn.textContent = "Annuler";
+    clearAllBtn.classList.remove('btn-danger');
+    clearAllBtn.classList.add('btn-secondary');
+
+    // Focus sur le titre
+    elemTitle.focus();
+}
+
+// Quitter/Sauvegarder proprement le mode modification
+function saveFeatureChanges() {
+    if (!editingFeatureId) return;
+
+    const index = savedFeatures.findIndex(f => f.id === editingFeatureId);
+    if (index !== -1) {
+        savedFeatures[index].title = elemTitle.value.trim() || 'Élément sans nom';
+        savedFeatures[index].desc = elemDesc.value.trim() || '';
+        savedFeatures[index].category = elemCategory.value.trim() || 'Général';
+        savedFeatures[index].subcategory = elemSubCategory.value.trim() || 'Général';
+        savedFeatures[index].color = elemColor.value;
+        if (savedFeatures[index].fill) {
+            savedFeatures[index].fill = elemFill.value;
+        }
+    }
+
+    exitEditFeatureMode();
+    renderFeatures();
+    resetForm();
+}
+
+function exitEditFeatureMode() {
+    editingFeatureId = null;
+    toolButtons.forEach(b => b.classList.remove('disabled'));
+    downloadJsonBtn.textContent = "Télécharger JSON";
+    downloadJsonBtn.style.background = "#2563eb";
+    
+    clearAllBtn.textContent = "Vider";
+    clearAllBtn.classList.add('btn-danger');
+    clearAllBtn.classList.remove('btn-secondary');
+}
+
+// Gestion des touches Entrée (valider) et Échap (annuler)
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        if (editingFeatureId) {
+            saveFeatureChanges();
+        } else {
+            finishPolygonDrawing();
+        }
+    } 
+    else if (e.key === 'Escape') {
+        if (editingFeatureId) {
+            exitEditFeatureMode();
+            resetForm();
+        } else if (editMode && (firstClickLatLng || polygonPoints.length > 0)) {
+            resetDrawState();
+            console.log("Tracé annulé avec Échap");
+        }
+    }
+});
+
+map.on('click', (e) => {
+    if (!editMode || editingFeatureId) return; // Désactivé si on est en train de modifier les propriétés d'un vieux point
+
+    const title = elemTitle.value.trim() || 'Élément sans nom';
+    const desc = elemDesc.value.trim() || '';
+    const category = elemCategory.value.trim() || 'Général';
+    const subcategory = elemSubCategory.value.trim() || 'Général';
+    const color = elemColor.value;
+    const fill = elemFill.value;
+
+    const pt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
 
     if (selectedTool === 'marker') {
         savedFeatures.push({
             id: Date.now(),
             type: 'marker',
-            latlng: [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))],
-            title, desc, category, color
+            latlng: pt,
+            title, desc, category, subcategory, color
         });
         renderFeatures();
         resetForm();
@@ -189,9 +307,9 @@ map.on('click', (e) => {
                 type: 'rectangle',
                 bounds: [
                     [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))],
-                    [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))]
+                    pt
                 ],
-                title, desc, category, color, fill
+                title, desc, category, subcategory, color, fill
             });
             renderFeatures();
             resetForm();
@@ -209,24 +327,41 @@ map.on('click', (e) => {
                 id: Date.now(),
                 type: 'circle',
                 latlng: [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))],
-                radius, title, desc, category, color, fill
+                radius, title, desc, category, subcategory, color, fill
             });
             renderFeatures();
             resetForm();
         }
     }
+    else if (selectedTool === 'polygon') {
+        polygonPoints.push(pt);
+        if (polygonPoints.length === 1) {
+            tempDrawLayer = L.polygon([pt, pt], { color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
+        } else {
+            tempDrawLayer.setLatLngs([...polygonPoints, pt]);
+        }
+    }
 });
 
 map.on('mousemove', (e) => {
-    if (!editMode || !firstClickLatLng || !tempDrawLayer) return;
-    if (selectedTool === 'rectangle') {
+    if (!editMode || !tempDrawLayer || editingFeatureId) return;
+    
+    if (selectedTool === 'rectangle' && firstClickLatLng) {
         tempDrawLayer.setBounds([firstClickLatLng, e.latlng]);
-    } else if (selectedTool === 'circle') {
+    } else if (selectedTool === 'circle' && firstClickLatLng) {
         const dx = e.latlng.lng - firstClickLatLng.lng;
         const dy = e.latlng.lat - firstClickLatLng.lat;
         const radius = Math.sqrt(dx * dx + dy * dy);
         tempDrawLayer.setRadius(radius);
+    } else if (selectedTool === 'polygon' && polygonPoints.length > 0) {
+        const mousePt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
+        tempDrawLayer.setLatLngs([...polygonPoints, mousePt]);
     }
+});
+
+map.on('dblclick', (e) => {
+    if (editingFeatureId) return;
+    finishPolygonDrawing();
 });
 
 function resetForm() {
@@ -236,14 +371,29 @@ function resetForm() {
 }
 
 function deleteFeature(id) {
+    if (editingFeatureId === id) exitEditFeatureMode();
     savedFeatures = savedFeatures.filter(f => f.id !== id);
     renderFeatures();
 }
 
 clearAllBtn.addEventListener('click', () => {
+    // Si on est en mode édition d'élément, ce bouton sert à annuler
+    if (editingFeatureId) {
+        exitEditFeatureMode();
+        resetForm();
+        return;
+    }
     if (confirm('Voulez-vous effacer tous les éléments actuellement affichés ?')) {
         savedFeatures = [];
         renderFeatures();
+    }
+});
+
+// Le bouton de téléchargement applique la modif si un id est en cours d'édition
+downloadJsonBtn.addEventListener('click', (e) => {
+    if (editingFeatureId) {
+        e.stopImmediatePropagation();
+        saveFeatureChanges();
     }
 });
 
@@ -251,33 +401,54 @@ function renderFeatures() {
     activeLayers.forEach(layer => map.removeLayer(layer));
     activeLayers = [];
     itemsList.innerHTML = '';
-    const categories = new Set();
+    
+    const hierarchy = {};
 
     savedFeatures.forEach(feat => {
-        categories.add(feat.category);
-        const isHidden = hiddenCategories.has(feat.category);
+        const cat = feat.category || 'Général';
+        const sub = feat.subcategory || 'Général';
+        
+        if (!hierarchy[cat]) hierarchy[cat] = new Set();
+        hierarchy[cat].add(sub);
+
+        const isCatHidden = hiddenCategories.has(cat);
+        const isSubHidden = hiddenSubCategories.has(`${cat}:${sub}`);
 
         const itemRow = document.createElement('div');
-        itemRow.className = 'saved-item-row';
+        itemRow.className = `saved-item-row ${editingFeatureId === feat.id ? 'editing-active' : ''}`;
         itemRow.innerHTML = `
-            <span class="saved-item-name" style="color: ${feat.color}">${feat.title} <small style="color:#64748b">(${feat.category})</small></span>
-            <span class="delete-item-icon" data-id="${feat.id}">&times;</span>
+            <span class="saved-item-name" style="color: ${feat.color}">${feat.title} <small style="color:#64748b">(${sub})</small></span>
+            <div class="item-row-actions">
+                <span class="edit-item-icon" data-id="${feat.id}">✏️</span>
+                <span class="delete-item-icon" data-id="${feat.id}">&times;</span>
+            </div>
         `;
+        
+        itemRow.querySelector('.edit-item-icon').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!editMode) {
+                // Activer automatiquement le mode édition si fermé
+                controlTrigger.click();
+            }
+            startEditFeature(feat.id);
+        });
+
         itemRow.querySelector('.delete-item-icon').addEventListener('click', (e) => {
             e.stopPropagation();
             deleteFeature(feat.id);
         });
+
         itemRow.addEventListener('click', () => {
             if (feat.type === 'rectangle') map.fitBounds(feat.bounds);
-            else if (feat.type === 'circle') map.setView(feat.latlng, map.getZoom());
+            else if (feat.type === 'polygon') map.fitBounds(feat.latlngs);
             else map.setView(feat.latlng, map.getZoom());
         });
         itemsList.appendChild(itemRow);
 
-        if (isHidden) return;
+        if (isCatHidden || isSubHidden) return;
 
         let layer;
-        const content = `<div><h3>${feat.title}</h3>${feat.desc ? `<p>${feat.desc}</p>` : ''}<small style="color:#64748b;display:block;margin-top:4px;">Catégorie: ${feat.category}</small></div>`;
+        const content = `<div><h3>${feat.title}</h3>${feat.desc ? `<p>${feat.desc}</p>` : ''}<small style="color:#64748b;display:block;margin-top:4px;">Catégorie: ${cat} > ${sub}</small></div>`;
 
         if (feat.type === 'marker') {
             const customIcon = L.divIcon({
@@ -292,6 +463,8 @@ function renderFeatures() {
             layer = L.rectangle(feat.bounds, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         } else if (feat.type === 'circle') {
             layer = L.circle(feat.latlng, { radius: feat.radius, color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
+        } else if (feat.type === 'polygon') {
+            layer = L.polygon(feat.latlngs, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         }
 
         if (layer) {
@@ -299,27 +472,60 @@ function renderFeatures() {
             activeLayers.push(layer);
         }
     });
-    renderLegend(Array.from(categories));
+    
+    renderLegend(hierarchy);
 }
 
-function renderLegend(categoriesList) {
+function renderLegend(hierarchy) {
     legendList.innerHTML = '';
-    if (categoriesList.length === 0) return;
     
-    categoriesList.forEach(cat => {
-        const feat = savedFeatures.find(f => f.category === cat);
-        const color = feat ? feat.color : '#2563eb';
-        const isHidden = hiddenCategories.has(cat);
+    Object.keys(hierarchy).forEach(cat => {
+        const isCatHidden = hiddenCategories.has(cat);
+        const catGroup = document.createElement('div');
+        catGroup.className = 'legend-cat-group';
 
-        const legItem = document.createElement('div');
-        legItem.className = `legend-item ${isHidden ? 'muted' : ''}`;
-        legItem.innerHTML = `<div class="legend-color" style="background-color: ${color}"></div><span>${cat}</span>`;
-        legItem.addEventListener('click', () => {
-            if (hiddenCategories.has(cat)) hiddenCategories.delete(cat);
-            else hiddenCategories.add(cat);
+        const mainTitle = document.createElement('div');
+        mainTitle.className = `legend-main-title ${isCatHidden ? 'muted' : ''}`;
+        mainTitle.innerHTML = `<span>${cat}</span><small style="font-size:9px;">${isCatHidden ? 'CACHÉ' : 'VISIBLE'}</small>`;
+        
+        mainTitle.addEventListener('click', () => {
+            if (hiddenCategories.has(cat)) {
+                hiddenCategories.delete(cat);
+            } else {
+                hiddenCategories.add(cat);
+            }
             renderFeatures();
         });
-        legendList.appendChild(legItem);
+        catGroup.appendChild(mainTitle);
+
+        const subList = document.createElement('div');
+        subList.className = 'legend-sub-list';
+
+        hierarchy[cat].forEach(sub => {
+            const subKey = `${cat}:${sub}`;
+            const isSubHidden = hiddenSubCategories.has(subKey);
+            
+            const feat = savedFeatures.find(f => (f.category || 'Général') === cat && (f.subcategory || 'Général') === sub);
+            const color = feat ? feat.color : '#2563eb';
+
+            const legItem = document.createElement('div');
+            legItem.className = `legend-item ${isSubHidden || isCatHidden ? 'muted' : ''}`;
+            legItem.innerHTML = `<div class="legend-color" style="background-color: ${color}"></div><span>${sub}</span>`;
+            
+            legItem.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (hiddenSubCategories.has(subKey)) {
+                    hiddenSubCategories.delete(subKey);
+                } else {
+                    hiddenSubCategories.add(subKey);
+                }
+                renderFeatures();
+            });
+            subList.appendChild(legItem);
+        });
+
+        catGroup.appendChild(subList);
+        legendList.appendChild(catGroup);
     });
 }
 
@@ -361,11 +567,12 @@ searchInput.addEventListener('input', () => {
     matches.forEach(feat => {
         const item = document.createElement('div');
         item.className = 'search-item';
-        item.innerHTML = `<strong style="color: ${feat.color || '#2563eb'}">${feat.title}</strong> <span style="color: #64748b; font-size:10px;">(${feat.category})</span>`;
+        const sub = feat.subcategory || 'Général';
+        item.innerHTML = `<strong style="color: ${feat.color || '#2563eb'}">${feat.title}</strong> <span style="color: #64748b; font-size:10px;">(${sub})</span>`;
         
         item.addEventListener('click', () => {
-            if (feat.type === 'rectangle') {
-                map.fitBounds(feat.bounds);
+            if (feat.type === 'rectangle' || feat.type === 'polygon') {
+                map.fitBounds(feat.bounds || feat.latlngs);
             } else {
                 map.setView(feat.latlng, 0);
             }
