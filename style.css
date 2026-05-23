@@ -206,7 +206,7 @@ html, body {
 }
 
 .panel-section {
-    padding: 16px;
+    padding: 14px 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
@@ -225,15 +225,15 @@ html, body {
 
 .tool-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
 }
 
 .tool-btn {
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: #94a3b8;
-    padding: 10px;
+    padding: 8px 4px;
     border-radius: 6px;
     cursor: pointer;
     display: flex;
@@ -256,8 +256,18 @@ html, body {
     color: #60a5fa;
 }
 
+.form-group-row {
+    display: flex;
+    gap: 8px;
+}
+
+.form-group-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
 .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .form-group:last-child {
@@ -266,9 +276,9 @@ html, body {
 
 .form-group label {
     display: block;
-    font-size: 12px;
+    font-size: 11px;
     color: #94a3b8;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .form-control {
@@ -276,7 +286,7 @@ html, body {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 6px;
-    padding: 8px 12px;
+    padding: 8px 10px;
     color: #ffffff;
     font-size: 13px;
     outline: none;
@@ -341,9 +351,9 @@ html, body {
 }
 
 .view-panel {
-    bottom: 240px;
+    bottom: 270px;
     left: 16px;
-    width: 280px;
+    width: 300px;
     padding: 12px 16px;
 }
 
@@ -388,8 +398,8 @@ html, body {
 .legend-panel {
     bottom: 24px;
     left: 16px;
-    width: 280px;
-    max-height: 200px;
+    width: 300px;
+    max-height: 230px;
     display: flex;
     flex-direction: column;
 }
@@ -410,12 +420,50 @@ html, body {
     flex: 1;
 }
 
+.legend-cat-group {
+    margin-bottom: 10px;
+}
+
+.legend-cat-group:last-child {
+    margin-bottom: 0;
+}
+
+.legend-main-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.legend-main-title:hover {
+    color: #60a5fa;
+}
+
+.legend-main-title.muted {
+    opacity: 0.4;
+}
+
+.legend-sub-list {
+    padding-left: 12px;
+    margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 0;
-    font-size: 13px;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 12px;
     color: #cbd5e1;
     cursor: pointer;
     transition: color 0.15s ease;
@@ -426,9 +474,9 @@ html, body {
 }
 
 .legend-color {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
     flex-shrink: 0;
 }
 
@@ -439,7 +487,7 @@ html, body {
 
 .items-list {
     overflow-y: auto;
-    max-height: 160px;
+    max-height: 140px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -483,13 +531,13 @@ html, body {
 }
 
 .leaflet-popup-content h3 {
-    margin: 0 0 6px 0;
+    margin: 0 0 4px 0;
     font-size: 14px;
     color: #ffffff;
 }
 
 .leaflet-popup-content p {
-    margin: 0;
+    margin: 0 0 6px 0;
     font-size: 12px;
     color: #94a3b8;
 }
