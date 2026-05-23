@@ -50,6 +50,10 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
                     <span>Carre</span>
                 </button>
+                <button class="tool-btn" data-type="bunker">
+                    <img src="bunker.jpg" alt="bunker" style="width: 16px; height: 16px; vertical-align: middle;">
+                    <span>Bunker</span>
+                </button>
                 <button class="tool-btn" data-type="circle">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
                     <span>Rond</span>
@@ -69,12 +73,12 @@
             </div>
             <div class="form-group">
                 <label for="elemDesc">Description</label>
-                <input type="text" id="elemDesc" class="form-control" placeholder="Infos complémentaires...">
+                <textarea id="elemDesc" class="form-control" rows="2" placeholder="Informations complémentaires..."></textarea>
             </div>
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="elemCategory">Catégorie</label>
-                    <input type="text" id="elemCategory" class="form-control" placeholder="Ex: Gang">
+                    <input type="text" id="elemCategory" class="form-control" placeholder="Ex: Organisation">
                 </div>
                 <div class="form-group">
                     <label for="elemSubCategory">Sous-Catégorie</label>
@@ -84,27 +88,29 @@
         </div>
 
         <div class="panel-section">
-            <div class="panel-title">Apparence</div>
+            <div class="panel-title">Couleurs</div>
             <div class="color-pickers">
                 <div class="color-wrapper">
                     <input type="color" id="elemColor" value="#2563eb">
                     <span>Bordure</span>
                 </div>
                 <div class="color-wrapper">
-                    <input type="color" id="elemFill" value="#2563eb">
-                    <span>Fond</span>
+                    <input type="color" id="elemFill" value="#3b82f6">
+                    <span>Remplissage</span>
                 </div>
             </div>
         </div>
 
-        <div class="panel-section" style="flex: 1; display: flex; flex-direction: column; min-height: 180px;">
-            <div class="panel-title">elements de la session</div>
+        <div class="panel-section" style="flex: 1; display: flex; flex-direction: column; min-height: 0;">
+            <div class="panel-title" style="margin-bottom: 4px;">Éléments enregistrés</div>
             <div class="items-list" id="itemsList"></div>
         </div>
 
-        <div class="panel-section" style="display: flex; gap: 8px;">
-            <button id="downloadJsonBtn" class="action-btn" style="background: #2563eb; color: white;">Télécharger JSON</button>
-            <button id="clearAllBtn" class="action-btn btn-danger" style="margin-top: 0; flex: 1;">Vider</button>
+        <div class="panel-section">
+            <div style="display: flex; gap: 8px;">
+                <button id="clearAllBtn" class="action-btn btn-danger" style="flex: 1;">Vider</button>
+                <button id="downloadJsonBtn" class="action-btn" style="flex: 2; background: #2563eb; color: white;">Télécharger JSON</button>
+            </div>
         </div>
     </div>
 
@@ -141,7 +147,7 @@
     </div>
 
     <div class="credits-footer">
-        Crée par <a href="https://github.com/khorosenai2" target="_blank" rel="noopener noreferrer">khorosenai</a> with ❤️ — Recensement par 30 et seraph
+        Crée par <a href="https://github.com/" target="_blank">Dev</a>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
