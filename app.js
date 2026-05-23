@@ -200,9 +200,11 @@ map.on('click', (e) => {
     else if (selectedTool === 'circle') {
         if (!firstClickLatLng) {
             firstClickLatLng = e.latlng;
-            tempDrawLayer = L.circle(firstClickLatLng, { radius: 1, color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
+            tempDrawLayer = L.circle(firstClickLatLng, { radius: 0, color, weight: 2, fillOpacity: 0.2, fillColor: fill }).addTo(map);
         } else {
-            const radius = parseFloat(firstClickLatLng.distanceTo(e.latlng).toFixed(2));
+            const dx = e.latlng.lng - firstClickLatLng.lng;
+            const dy = e.latlng.lat - firstClickLatLng.lat;
+            const radius = parseFloat(Math.sqrt(dx * dx + dy * dy).toFixed(2));
             savedFeatures.push({
                 id: Date.now(),
                 type: 'circle',
@@ -220,7 +222,10 @@ map.on('mousemove', (e) => {
     if (selectedTool === 'rectangle') {
         tempDrawLayer.setBounds([firstClickLatLng, e.latlng]);
     } else if (selectedTool === 'circle') {
-        tempDrawLayer.setRadius(firstClickLatLng.distanceTo(e.latlng));
+        const dx = e.latlng.lng - firstClickLatLng.lng;
+        const dy = e.latlng.lat - firstClickLatLng.lat;
+        const radius = Math.sqrt(dx * dx + dy * dy);
+        tempDrawLayer.setRadius(radius);
     }
 });
 
@@ -264,6 +269,7 @@ function renderFeatures() {
         });
         itemRow.addEventListener('click', () => {
             if (feat.type === 'rectangle') map.fitBounds(feat.bounds);
+            else if (feat.type === 'circle') map.setView(feat.latlng, map.getZoom());
             else map.setView(feat.latlng, map.getZoom());
         });
         itemsList.appendChild(itemRow);
