@@ -29,9 +29,9 @@ let firstClickLatLng = null;
 let polygonPoints = [];
 let hiddenCategories = new Set();
 let hiddenSubCategories = new Set();
+let pinnedSubCategories = new Set(); // Stocke les clés "Catégorie:Sous-Catégorie" dont les titres sont affichés fixement
 let currentOverlayLayer = null;
 
-// Variables pour la modification d'éléments existants
 let editingFeatureId = null; 
 
 const mapWidth = 8192;
@@ -155,7 +155,7 @@ controlTrigger.addEventListener('click', () => {
 
 toolButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-        if (editingFeatureId) return; // Interdit de changer d'outil pendant la modification d'un ancien point
+        if (editingFeatureId) return; 
         toolButtons.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedTool = btn.getAttribute('data-type');
@@ -192,14 +192,12 @@ function finishPolygonDrawing() {
     resetForm();
 }
 
-// Activer le mode modification sur une ancienne forme/point
 function startEditFeature(id) {
     const feat = savedFeatures.find(f => f.id === id);
     if (!feat) return;
 
     editingFeatureId = id;
     
-    // Remplir le formulaire avec les anciennes valeurs
     elemTitle.value = feat.title;
     elemDesc.value = feat.desc || '';
     elemCategory.value = feat.category || 'Général';
@@ -207,23 +205,18 @@ function startEditFeature(id) {
     elemColor.value = feat.color || '#2563eb';
     if (feat.fill) elemFill.value = feat.fill;
 
-    // Bloquer les boutons d'outils de dessin pour éviter les conflits
     toolButtons.forEach(b => b.classList.add('disabled'));
 
-    // Modifier le bouton de téléchargement pour en faire le bouton de sauvegarde de la modif
     downloadJsonBtn.textContent = "Enregistrer l'élément";
-    downloadJsonBtn.style.background = "#10b981"; // Couleur verte de confirmation
+    downloadJsonBtn.style.background = "#10b981";
 
-    // Transformer le bouton Vider en bouton d'annulation
     clearAllBtn.textContent = "Annuler";
     clearAllBtn.classList.remove('btn-danger');
     clearAllBtn.classList.add('btn-secondary');
 
-    // Focus sur le titre
     elemTitle.focus();
 }
 
-// Quitter/Sauvegarder proprement le mode modification
 function saveFeatureChanges() {
     if (!editingFeatureId) return;
 
@@ -255,7 +248,6 @@ function exitEditFeatureMode() {
     clearAllBtn.classList.remove('btn-secondary');
 }
 
-// Gestion des touches Entrée (valider) et Échap (annuler)
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
         if (editingFeatureId) {
@@ -276,7 +268,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 map.on('click', (e) => {
-    if (!editMode || editingFeatureId) return; // Désactivé si on est en train de modifier les propriétés d'un vieux point
+    if (!editMode || editingFeatureId) return; 
 
     const title = elemTitle.value.trim() || 'Élément sans nom';
     const desc = elemDesc.value.trim() || '';
@@ -287,10 +279,10 @@ map.on('click', (e) => {
 
     const pt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
 
-    if (selectedTool === 'marker') {
+    if (selectedTool === 'marker' || selectedTool === 'candy') {
         savedFeatures.push({
             id: Date.now(),
-            type: 'marker',
+            type: selectedTool,
             latlng: pt,
             title, desc, category, subcategory, color
         });
@@ -377,7 +369,6 @@ function deleteFeature(id) {
 }
 
 clearAllBtn.addEventListener('click', () => {
-    // Si on est en mode édition d'élément, ce bouton sert à annuler
     if (editingFeatureId) {
         exitEditFeatureMode();
         resetForm();
@@ -389,7 +380,6 @@ clearAllBtn.addEventListener('click', () => {
     }
 });
 
-// Le bouton de téléchargement applique la modif si un id est en cours d'édition
 downloadJsonBtn.addEventListener('click', (e) => {
     if (editingFeatureId) {
         e.stopImmediatePropagation();
@@ -407,12 +397,14 @@ function renderFeatures() {
     savedFeatures.forEach(feat => {
         const cat = feat.category || 'Général';
         const sub = feat.subcategory || 'Général';
+        const subKey = `${cat}:${sub}`;
         
         if (!hierarchy[cat]) hierarchy[cat] = new Set();
         hierarchy[cat].add(sub);
 
         const isCatHidden = hiddenCategories.has(cat);
-        const isSubHidden = hiddenSubCategories.has(`${cat}:${sub}`);
+        const isSubHidden = hiddenSubCategories.has(subKey);
+        const isTitlePinned = pinnedSubCategories.has(subKey);
 
         const itemRow = document.createElement('div');
         itemRow.className = `saved-item-row ${editingFeatureId === feat.id ? 'editing-active' : ''}`;
@@ -427,7 +419,6 @@ function renderFeatures() {
         itemRow.querySelector('.edit-item-icon').addEventListener('click', (e) => {
             e.stopPropagation();
             if (!editMode) {
-                // Activer automatiquement le mode édition si fermé
                 controlTrigger.click();
             }
             startEditFeature(feat.id);
@@ -459,6 +450,14 @@ function renderFeatures() {
                 popupAnchor: [0, -24]
             });
             layer = L.marker(feat.latlng, { icon: customIcon });
+        } else if (feat.type === 'candy') {
+            const candyIcon = L.icon({
+                iconUrl: 'drogue.jpg',
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+                popupAnchor: [0, -13]
+            });
+            layer = L.marker(feat.latlng, { icon: candyIcon });
         } else if (feat.type === 'rectangle') {
             layer = L.rectangle(feat.bounds, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         } else if (feat.type === 'circle') {
@@ -470,6 +469,23 @@ function renderFeatures() {
         if (layer) {
             layer.bindPopup(content).addTo(map);
             activeLayers.push(layer);
+
+            // Si la sous-catégorie demande un affichage de titre permanent
+            if (isTitlePinned) {
+                let labelLatLng = feat.latlng;
+                if (feat.type === 'rectangle') {
+                    labelLatLng = L.latLngBounds(feat.bounds).getCenter();
+                } else if (feat.type === 'polygon') {
+                    labelLatLng = L.polygon(feat.latlngs).getBounds().getCenter();
+                }
+
+                layer.bindTooltip(`<div class="permanent-label-content" style="color: ${feat.color}">${feat.title}</div>`, {
+                    permanent: true,
+                    direction: 'top',
+                    className: 'permanent-map-label',
+                    offset: feat.type === 'marker' || feat.type === 'candy' ? [0, -15] : [0, 0]
+                }).addTo(map);
+            }
         }
     });
     
@@ -504,9 +520,13 @@ function renderLegend(hierarchy) {
         hierarchy[cat].forEach(sub => {
             const subKey = `${cat}:${sub}`;
             const isSubHidden = hiddenSubCategories.has(subKey);
+            const isPinned = pinnedSubCategories.has(subKey);
             
             const feat = savedFeatures.find(f => (f.category || 'Général') === cat && (f.subcategory || 'Général') === sub);
             const color = feat ? feat.color : '#2563eb';
+
+            const itemWrapper = document.createElement('div');
+            itemWrapper.className = 'legend-item-wrapper';
 
             const legItem = document.createElement('div');
             legItem.className = `legend-item ${isSubHidden || isCatHidden ? 'muted' : ''}`;
@@ -521,7 +541,26 @@ function renderLegend(hierarchy) {
                 }
                 renderFeatures();
             });
-            subList.appendChild(legItem);
+
+            // Petit bouton d'épinglage du texte fixe sur la map
+            const pinBtn = document.createElement('span');
+            pinBtn.className = `pin-title-btn ${isPinned ? 'pinned' : ''}`;
+            pinBtn.textContent = '📌';
+            pinBtn.title = isPinned ? 'Masquer les titres permanents' : 'Afficher les titres en permanence sur la carte';
+            
+            pinBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (pinnedSubCategories.has(subKey)) {
+                    pinnedSubCategories.delete(subKey);
+                } else {
+                    pinnedSubCategories.add(subKey);
+                }
+                renderFeatures();
+            });
+
+            itemWrapper.appendChild(legItem);
+            itemWrapper.appendChild(pinBtn);
+            subList.appendChild(itemWrapper);
         });
 
         catGroup.appendChild(subList);
