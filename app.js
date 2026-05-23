@@ -59,7 +59,7 @@ function changeMapStyle(styleName) {
     currentOverlayLayer = L.imageOverlay(mapImages[styleName], bounds).addTo(map);
 }
 
-changeMapStyle('atlas');
+changeMapStyle('satellite');
 
 async function loadDefaultMarkers() {
     try {
