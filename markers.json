@@ -654,11 +654,12 @@
         3392
       ]
     ],
-    "title": "wuw café",
+    "title": "uwu café",
     "desc": "",
     "category": "Important 10-3 oraux",
     "color": "#002bd6",
-    "fill": "#2563eb"
+    "fill": "#2563eb",
+    "subcategory": "Général"
   },
   {
     "id": 1779541429920,
@@ -903,25 +904,6 @@
       ]
     ],
     "title": "Quartier familis",
-    "desc": "",
-    "category": "Important 10-3 oraux",
-    "color": "#002bd6",
-    "fill": "#2563eb"
-  },
-  {
-    "id": 1779542139037,
-    "type": "rectangle",
-    "bounds": [
-      [
-        1667,
-        3594
-      ],
-      [
-        1551,
-        3703
-      ]
-    ],
-    "title": "Élément sans nom",
     "desc": "",
     "category": "Important 10-3 oraux",
     "color": "#002bd6",
