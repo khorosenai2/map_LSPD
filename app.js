@@ -104,7 +104,7 @@ downloadJsonBtn.addEventListener('click', () => {
 
     const jsonString = JSON.stringify(savedFeatures, null, 2);
     
-    jsonPreviewArea.value = `// Ton commentaire ici : à modifier à la ligne 101 du fichier app.js\n// Aperçu avant export final\n\n${jsonString}`;
+    jsonPreviewArea.value = `Si tu modifie envoie moi le json pour que je change le truc :)\n// Aperçu avant export final\n\n${jsonString}`;
     
     previewModal.classList.add('active');
 });
