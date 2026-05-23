@@ -509,7 +509,7 @@ html, body {
     text-decoration: line-through;
 }
 
-
+/* Bouton pour Épingler le titre fixe */
 .pin-title-btn {
     font-size: 11px;
     cursor: pointer;
@@ -529,7 +529,7 @@ html, body {
     filter: drop-shadow(0 0 3px #3b82f6);
 }
 
-
+/* Styles pour les étiquettes de titre permanentes sur la map */
 .permanent-map-label {
     background: transparent;
     border: none;
