@@ -29,7 +29,7 @@ let firstClickLatLng = null;
 let polygonPoints = [];
 let hiddenCategories = new Set();
 let hiddenSubCategories = new Set();
-let pinnedSubCategories = new Set();
+let pinnedSubCategories = new Set(); 
 let currentOverlayLayer = null;
 
 let editingFeatureId = null; 
@@ -279,7 +279,7 @@ map.on('click', (e) => {
 
     const pt = [parseFloat(e.latlng.lat.toFixed(2)), parseFloat(e.latlng.lng.toFixed(2))];
 
-    if (selectedTool === 'marker' || selectedTool === 'candy') {
+    if (selectedTool === 'marker' || selectedTool === 'candy' || selectedTool === 'bunker') {
         savedFeatures.push({
             id: Date.now(),
             type: selectedTool,
@@ -337,7 +337,6 @@ map.on('click', (e) => {
 
 map.on('mousemove', (e) => {
     if (!editMode || !tempDrawLayer || editingFeatureId) return;
-    
     if (selectedTool === 'rectangle' && firstClickLatLng) {
         tempDrawLayer.setBounds([firstClickLatLng, e.latlng]);
     } else if (selectedTool === 'circle' && firstClickLatLng) {
@@ -391,14 +390,13 @@ function renderFeatures() {
     activeLayers.forEach(layer => map.removeLayer(layer));
     activeLayers = [];
     itemsList.innerHTML = '';
-    
     const hierarchy = {};
 
     savedFeatures.forEach(feat => {
         const cat = feat.category || 'Général';
         const sub = feat.subcategory || 'Général';
         const subKey = `${cat}:${sub}`;
-        
+
         if (!hierarchy[cat]) hierarchy[cat] = new Set();
         hierarchy[cat].add(sub);
 
@@ -415,7 +413,6 @@ function renderFeatures() {
                 <span class="delete-item-icon" data-id="${feat.id}">&times;</span>
             </div>
         `;
-        
         itemRow.querySelector('.edit-item-icon').addEventListener('click', (e) => {
             e.stopPropagation();
             if (!editMode) {
@@ -423,12 +420,10 @@ function renderFeatures() {
             }
             startEditFeature(feat.id);
         });
-
         itemRow.querySelector('.delete-item-icon').addEventListener('click', (e) => {
             e.stopPropagation();
             deleteFeature(feat.id);
         });
-
         itemRow.addEventListener('click', () => {
             if (feat.type === 'rectangle') map.fitBounds(feat.bounds);
             else if (feat.type === 'polygon') map.fitBounds(feat.latlngs);
@@ -439,7 +434,7 @@ function renderFeatures() {
         if (isCatHidden || isSubHidden) return;
 
         let layer;
-        const content = `<div><h3>${feat.title}</h3>${feat.desc ? `<p>${feat.desc}</p>` : ''}<small style="color:#64748b;display:block;margin-top:4px;">Catégorie: ${cat} > ${sub}</small></div>`;
+        const content = `<div><h3>${feat.title}</h3>${feat.desc ? `<p>${feat.desc}</p>` : ''}<small style="color:#64748b;display:block;margin-top:4px;">Catégorie: ${cat} | ${sub}</small></div>`;
 
         if (feat.type === 'marker') {
             const customIcon = L.divIcon({
@@ -450,19 +445,33 @@ function renderFeatures() {
                 popupAnchor: [0, -24]
             });
             layer = L.marker(feat.latlng, { icon: customIcon });
-        } else if (feat.type === 'candy') {
-            const candyIcon = L.icon({
+        } 
+        else if (feat.type === 'candy') {
+            const drogueIcon = L.icon({
                 iconUrl: 'drogue.jpg',
-                iconSize: [26, 26],
-                iconAnchor: [13, 13],
-                popupAnchor: [0, -13]
+                iconSize: [40, 40],
+                iconAnchor: [30, 30],
+                popupAnchor: [0, -12]
             });
-            layer = L.marker(feat.latlng, { icon: candyIcon });
-        } else if (feat.type === 'rectangle') {
+            layer = L.marker(feat.latlng, { icon: drogueIcon });
+        }
+        else if (feat.type === 'bunker') {
+            const bunkerIcon = L.icon({
+                iconUrl: 'bunker.jpg',
+                iconSize: [50, 50],
+                iconAnchor: [30, 30],
+                popupAnchor: [0, -12],
+                className: 'bunker-custom-icon'
+            });
+            layer = L.marker(feat.latlng, { icon: bunkerIcon });
+        }
+        else if (feat.type === 'rectangle') {
             layer = L.rectangle(feat.bounds, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
-        } else if (feat.type === 'circle') {
+        } 
+        else if (feat.type === 'circle') {
             layer = L.circle(feat.latlng, { radius: feat.radius, color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
-        } else if (feat.type === 'polygon') {
+        }
+        else if (feat.type === 'polygon') {
             layer = L.polygon(feat.latlngs, { color: feat.color, weight: 2, fillColor: feat.fill, fillOpacity: 0.25 });
         }
 
@@ -470,7 +479,6 @@ function renderFeatures() {
             layer.bindPopup(content).addTo(map);
             activeLayers.push(layer);
 
-            // Si la sous-catégorie demande un affichage de titre permanent
             if (isTitlePinned) {
                 let labelLatLng = feat.latlng;
                 if (feat.type === 'rectangle') {
@@ -478,50 +486,52 @@ function renderFeatures() {
                 } else if (feat.type === 'polygon') {
                     labelLatLng = L.polygon(feat.latlngs).getBounds().getCenter();
                 }
-
+                
                 layer.bindTooltip(`<div class="permanent-label-content" style="color: ${feat.color}">${feat.title}</div>`, {
                     permanent: true,
                     direction: 'top',
                     className: 'permanent-map-label',
-                    offset: feat.type === 'marker' || feat.type === 'candy' ? [0, -15] : [0, 0]
+                    offset: (feat.type === 'marker' || feat.type === 'candy' || feat.type === 'bunker') ? [0, -15] : [0, 0]
                 }).addTo(map);
             }
         }
     });
-    
+
     renderLegend(hierarchy);
 }
 
 function renderLegend(hierarchy) {
     legendList.innerHTML = '';
-    
-    Object.keys(hierarchy).forEach(cat => {
+    const categoriesSorted = Object.keys(hierarchy).sort();
+
+    if (categoriesSorted.length === 0) return;
+
+    categoriesSorted.forEach(cat => {
         const isCatHidden = hiddenCategories.has(cat);
         const catGroup = document.createElement('div');
         catGroup.className = 'legend-cat-group';
 
         const mainTitle = document.createElement('div');
         mainTitle.className = `legend-main-title ${isCatHidden ? 'muted' : ''}`;
-        mainTitle.innerHTML = `<span>${cat}</span><small style="font-size:9px;">${isCatHidden ? 'CACHÉ' : 'VISIBLE'}</small>`;
+        mainTitle.innerHTML = `<span>${cat}</span><small style="font-size:10px; opacity:0.6;">${isCatHidden ? '👁️ Masqué' : '👁️ Visible'}</small>`;
         
         mainTitle.addEventListener('click', () => {
-            if (hiddenCategories.has(cat)) {
-                hiddenCategories.delete(cat);
-            } else {
-                hiddenCategories.add(cat);
-            }
+            if (hiddenCategories.has(cat)) hiddenCategories.delete(cat);
+            else hiddenCategories.add(cat);
             renderFeatures();
         });
+
         catGroup.appendChild(mainTitle);
 
-        const subList = document.createElement('div');
-        subList.className = 'legend-sub-list';
+        const subListContainer = document.createElement('div');
+        subListContainer.className = 'legend-sub-list';
 
-        hierarchy[cat].forEach(sub => {
+        const subCategoriesSorted = Array.from(hierarchy[cat]).sort();
+        subCategoriesSorted.forEach(sub => {
             const subKey = `${cat}:${sub}`;
             const isSubHidden = hiddenSubCategories.has(subKey);
-            const isPinned = pinnedSubCategories.has(subKey);
-            
+            const isTitlePinned = pinnedSubCategories.has(subKey);
+
             const feat = savedFeatures.find(f => (f.category || 'Général') === cat && (f.subcategory || 'Général') === sub);
             const color = feat ? feat.color : '#2563eb';
 
@@ -529,41 +539,33 @@ function renderLegend(hierarchy) {
             itemWrapper.className = 'legend-item-wrapper';
 
             const legItem = document.createElement('div');
-            legItem.className = `legend-item ${isSubHidden || isCatHidden ? 'muted' : ''}`;
+            legItem.className = `legend-item ${isSubHidden ? 'muted' : ''}`;
             legItem.innerHTML = `<div class="legend-color" style="background-color: ${color}"></div><span>${sub}</span>`;
             
-            legItem.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (hiddenSubCategories.has(subKey)) {
-                    hiddenSubCategories.delete(subKey);
-                } else {
-                    hiddenSubCategories.add(subKey);
-                }
+            legItem.addEventListener('click', () => {
+                if (hiddenSubCategories.has(subKey)) hiddenSubCategories.delete(subKey);
+                else hiddenSubCategories.add(subKey);
                 renderFeatures();
             });
 
-            // Petit bouton d'épinglage du texte fixe sur la map
             const pinBtn = document.createElement('span');
-            pinBtn.className = `pin-title-btn ${isPinned ? 'pinned' : ''}`;
-            pinBtn.textContent = '📌';
-            pinBtn.title = isPinned ? 'Masquer les titres permanents' : 'Afficher les titres en permanence sur la carte';
+            pinBtn.className = `pin-title-btn ${isTitlePinned ? 'pinned' : ''}`;
+            pinBtn.innerHTML = isTitlePinned ? '📌' : '📍';
+            pinBtn.title = isTitlePinned ? "Masquer les titres fixes sur la map" : "Afficher fixement les titres sur la map";
             
             pinBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (pinnedSubCategories.has(subKey)) {
-                    pinnedSubCategories.delete(subKey);
-                } else {
-                    pinnedSubCategories.add(subKey);
-                }
+                if (pinnedSubCategories.has(subKey)) pinnedSubCategories.delete(subKey);
+                else pinnedSubCategories.add(subKey);
                 renderFeatures();
             });
 
             itemWrapper.appendChild(legItem);
             itemWrapper.appendChild(pinBtn);
-            subList.appendChild(itemWrapper);
+            subListContainer.appendChild(itemWrapper);
         });
 
-        catGroup.appendChild(subList);
+        catGroup.appendChild(subListContainer);
         legendList.appendChild(catGroup);
     });
 }
@@ -579,26 +581,33 @@ searchBtn.addEventListener('click', (e) => {
     if (searchContainer.classList.contains('open')) {
         searchInput.focus();
     } else {
-        searchInput.value = '';
         searchResults.classList.remove('active');
+        searchInput.value = '';
     }
 });
 
 searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase().trim();
+    const query = searchInput.value.trim().toLowerCase();
     searchResults.innerHTML = '';
 
-    if (query === '') {
+    if (!query) {
         searchResults.classList.remove('active');
         return;
     }
 
     const matches = savedFeatures.filter(feat => 
-        feat.title.toLowerCase().includes(query)
+        feat.title.toLowerCase().includes(query) || 
+        (feat.desc && feat.desc.toLowerCase().includes(query)) ||
+        (feat.category && feat.category.toLowerCase().includes(query)) ||
+        (feat.subcategory && feat.subcategory.toLowerCase().includes(query))
     );
 
     if (matches.length === 0) {
-        searchResults.innerHTML = '<div class="search-item" style="color: #64748b; cursor: default;">Aucun résultat</div>';
+        const noResult = document.createElement('div');
+        noResult.className = 'search-item';
+        noResult.style.color = '#64748b';
+        noResult.textContent = 'Aucun résultat trouvé';
+        searchResults.appendChild(noResult);
         searchResults.classList.add('active');
         return;
     }
@@ -638,8 +647,8 @@ searchInput.addEventListener('input', () => {
 
 document.addEventListener('click', (e) => {
     if (!searchContainer.contains(e.target)) {
-        searchContainer.classList.remove('open');
         searchResults.classList.remove('active');
+        searchContainer.classList.remove('open');
         searchInput.value = '';
     }
 });
