@@ -47,8 +47,8 @@ const bounds = [[0, 0], [mapHeight, mapWidth]];
 map.fitBounds(bounds);
 
 const mapImages = {
-    atlas: 'GTAV_ATLUS_8192x8192.jpg',
     satellite: 'GTAV-HD-MAP-satellite.jpg',
+    atlas: 'GTAV_ATLUS_8192x8192.jpg',
     roadmap: 'GTAV-HD-MAP-roadmap.jpg'
 };
 
