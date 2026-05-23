@@ -279,7 +279,7 @@ function saveFeatureChanges() {
         if (oldFeat.type !== tempEditingType) {
             oldFeat.type = tempEditingType;
             
-            if (tempEditingType === 'marker' || tempEditingType === 'candy' || tempEditingType === 'bunker') {
+            if (tempEditingType === 'marker' || tempEditingType === 'drogue' || tempEditingType === 'bunker') {
                 if (!firstClickLatLng) {
                     if (oldFeat.latlng) {}
                     else if (oldFeat.bounds) { oldFeat.latlng = L.latLngBounds(oldFeat.bounds).getCenter(); }
@@ -361,7 +361,7 @@ map.on('click', (e) => {
         const color = elemColor.value;
         const fill = elemFill.value;
 
-        if (targetType === 'marker' || targetType === 'candy' || targetType === 'bunker') {
+        if (targetType === 'marker' || targetType === 'drogue' || targetType === 'bunker') {
             savedFeatures[index].latlng = pt;
             saveFeatureChanges();
         }
@@ -408,7 +408,7 @@ map.on('click', (e) => {
     const color = elemColor.value;
     const fill = elemFill.value;
 
-    if (selectedTool === 'marker' || selectedTool === 'candy' || selectedTool === 'bunker') {
+    if (selectedTool === 'marker' || selectedTool === 'drogue' || selectedTool === 'bunker') {
         savedFeatures.push({
             id: Date.now(),
             type: selectedTool,
@@ -580,14 +580,14 @@ function renderFeatures() {
             });
             layer = L.marker(feat.latlng, { icon: customIcon });
         } 
-        else if (feat.type === 'candy' && feat.latlng) {
-            const candyIcon = L.icon({
+        else if (feat.type === 'drogue' && feat.latlng) {
+            const drogueIcon = L.icon({
                 iconUrl: 'drogue.jpg',
                 iconSize: [24, 24],
                 iconAnchor: [12, 12],
                 popupAnchor: [0, -12]
             });
-            layer = L.marker(feat.latlng, { icon: candyIcon });
+            layer = L.marker(feat.latlng, { icon: drogueIcon });
         }
         else if (feat.type === 'bunker' && feat.latlng) {
             const bunkerIcon = L.icon({
@@ -626,7 +626,7 @@ function renderFeatures() {
                         permanent: true,
                         direction: 'top',
                         className: 'permanent-map-label',
-                        offset: (feat.type === 'marker' || feat.type === 'candy' || feat.type === 'bunker') ? [0, -15] : [0, 0]
+                        offset: (feat.type === 'marker' || feat.type === 'drogue' || feat.type === 'bunker') ? [0, -15] : [0, 0]
                     }).addTo(map);
                 }
             }
