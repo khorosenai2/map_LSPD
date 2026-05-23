@@ -29,7 +29,7 @@ let firstClickLatLng = null;
 let polygonPoints = [];
 let hiddenCategories = new Set();
 let hiddenSubCategories = new Set();
-let pinnedSubCategories = new Set(); // Stocke les clés "Catégorie:Sous-Catégorie" dont les titres sont affichés fixement
+let pinnedSubCategories = new Set();
 let currentOverlayLayer = null;
 
 let editingFeatureId = null; 
