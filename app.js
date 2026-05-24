@@ -11,18 +11,14 @@ const elemFill = document.getElementById('elemFill');
 const itemsList = document.getElementById('itemsList');
 const legendList = document.getElementById('legendList');
 const clearAllBtn = document.getElementById('clearAllBtn');
-
-
 const downloadJsonBtn = document.getElementById('downloadJsonBtn');
 const saveElementBtn = document.getElementById('saveElementBtn');
-
 const jsonImporter = document.getElementById('jsonImporter');
 const previewModal = document.getElementById('previewModal');
 const jsonPreviewArea = document.getElementById('jsonPreviewArea');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const copyCodeBtn = document.getElementById('copyCodeBtn');
 const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
-
 const toolSectionTitle = document.getElementById('toolSectionTitle');
 const normalToolGrid = document.getElementById('normalToolGrid');
 const editTypeContainer = document.getElementById('editTypeContainer');
@@ -100,6 +96,15 @@ function triggerJsonDownload() {
     downloadAnchor.remove();
 }
 
+setInterval(() => {
+    if (savedFeatures.length > 0) {
+        triggerJsonDownload();
+        autosaveToast.classList.add('show');
+        setTimeout(() => {
+            autosaveToast.classList.remove('show');
+        }, 3500);
+    }
+}, 2 * 60 * 1000);
 
 jsonImporter.addEventListener('change', (e) => {
     const file = e.target.files[0];
@@ -122,7 +127,6 @@ jsonImporter.addEventListener('change', (e) => {
     };
     reader.readAsText(file);
 });
-
 
 downloadJsonBtn.addEventListener('click', () => {
     if (savedFeatures.length === 0) {
@@ -227,7 +231,6 @@ function startEditFeature(id) {
 
     manageShapeWarningVisibility(feat.type);
 
-
     downloadJsonBtn.style.display = 'none';
     saveElementBtn.style.display = 'block';
 
@@ -267,25 +270,10 @@ function saveFeatureChanges() {
         oldFeat.color = elemColor.value;
         oldFeat.fill = elemFill.value;
 
-        if (oldFeat.type === tempEditingType) {
-            if (tempEditingType === 'rectangle' && tempDrawLayer) {
-                const currentBounds = tempDrawLayer.getBounds();
-                oldFeat.bounds = [
-                    [parseFloat(currentBounds.getSouthWest().lat.toFixed(2)), parseFloat(currentBounds.getSouthWest().lng.toFixed(2))],
-                    [parseFloat(currentBounds.getNorthEast().lat.toFixed(2)), parseFloat(currentBounds.getNorthEast().lng.toFixed(2))]
-                ];
-            } else if (tempEditingType === 'circle' && tempDrawLayer) {
-                if (firstClickLatLng) {
-                    oldFeat.latlng = [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))];
-                    oldFeat.radius = parseFloat(tempDrawLayer.getRadius().toFixed(2));
-                }
-            } else if (tempEditingType === 'polygon' && polygonPoints.length >= 2) {
-                oldFeat.latlngs = [...polygonPoints];
-            }
-        } else {
+        if (oldFeat.type !== tempEditingType) {
             oldFeat.type = tempEditingType;
             
-            if (tempEditingType === 'marker' || tempEditingType === 'drogue' || tempEditingType === 'bunker') {
+            if (tempEditingType === 'marker' || tempEditingType === 'candy' || tempEditingType === 'bunker') {
                 if (!firstClickLatLng) {
                     if (oldFeat.latlng) {}
                     else if (oldFeat.bounds) { oldFeat.latlng = L.latLngBounds(oldFeat.bounds).getCenter(); }
@@ -302,7 +290,6 @@ function saveFeatureChanges() {
         }
     }
 
-    resetDrawState();
     exitEditFeatureMode();
     renderFeatures();
     resetForm();
@@ -320,7 +307,6 @@ function exitEditFeatureMode() {
     normalToolGrid.style.display = 'grid';
     editTypeContainer.style.display = 'none';
     shapeWarning.style.display = 'none';
-
 
     downloadJsonBtn.style.display = 'block';
     saveElementBtn.style.display = 'none';
@@ -353,44 +339,6 @@ document.addEventListener('keydown', (e) => {
             resetDrawState();
         }
     }
-
-    else if (e.key === 'Enter' && editMode && !editingFeatureId) {
-        const title = elemTitle.value.trim() || 'Élément sans nom';
-        const desc = elemDesc.value.trim() || '';
-        const category = elemCategory.value.trim() || 'Général';
-        const subcategory = elemSubCategory.value.trim() || 'Général';
-        const color = elemColor.value;
-        const fill = elemFill.value;
-
-        if (selectedTool === 'rectangle' && firstClickLatLng && tempDrawLayer) {
-            const currentBounds = tempDrawLayer.getBounds();
-            savedFeatures.push({
-                id: Date.now(),
-                type: 'rectangle',
-                bounds: [
-                    [parseFloat(currentBounds.getSouthWest().lat.toFixed(2)), parseFloat(currentBounds.getSouthWest().lng.toFixed(2))],
-                    [parseFloat(currentBounds.getNorthEast().lat.toFixed(2)), parseFloat(currentBounds.getNorthEast().lng.toFixed(2))]
-                ],
-                title, desc, category, subcategory, color, fill
-            });
-            renderFeatures();
-            resetForm();
-        } 
-        else if (selectedTool === 'circle' && firstClickLatLng && tempDrawLayer) {
-            savedFeatures.push({
-                id: Date.now(),
-                type: 'circle',
-                latlng: [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))],
-                radius: parseFloat(tempDrawLayer.getRadius().toFixed(2)),
-                title, desc, category, subcategory, color, fill
-            });
-            renderFeatures();
-            resetForm();
-        }
-        else if (selectedTool === 'polygon' && polygonPoints.length >= 2) {
-            finishPolygonDrawing();
-        }
-    }
 });
 
 map.on('click', (e) => {
@@ -406,7 +354,7 @@ map.on('click', (e) => {
         const color = elemColor.value;
         const fill = elemFill.value;
 
-        if (targetType === 'marker' || targetType === 'drogue' || targetType === 'bunker') {
+        if (targetType === 'marker' || targetType === 'candy' || targetType === 'bunker') {
             savedFeatures[index].latlng = pt;
             saveFeatureChanges();
         }
@@ -453,7 +401,7 @@ map.on('click', (e) => {
     const color = elemColor.value;
     const fill = elemFill.value;
 
-    if (selectedTool === 'marker' || selectedTool === 'drogue' || selectedTool === 'bunker') {
+    if (selectedTool === 'marker' || selectedTool === 'candy' || selectedTool === 'bunker') {
         savedFeatures.push({
             id: Date.now(),
             type: selectedTool,
@@ -625,14 +573,14 @@ function renderFeatures() {
             });
             layer = L.marker(feat.latlng, { icon: customIcon });
         } 
-        else if (feat.type === 'drogue' && feat.latlng) {
-            const drogueIcon = L.icon({
+        else if (feat.type === 'candy' && feat.latlng) {
+            const candyIcon = L.icon({
                 iconUrl: 'drogue.jpg',
                 iconSize: [24, 24],
                 iconAnchor: [12, 12],
                 popupAnchor: [0, -12]
             });
-            layer = L.marker(feat.latlng, { icon: drogueIcon });
+            layer = L.marker(feat.latlng, { icon: candyIcon });
         }
         else if (feat.type === 'bunker' && feat.latlng) {
             const bunkerIcon = L.icon({
@@ -671,7 +619,7 @@ function renderFeatures() {
                         permanent: true,
                         direction: 'top',
                         className: 'permanent-map-label',
-                        offset: (feat.type === 'marker' || feat.type === 'drogue' || feat.type === 'bunker') ? [0, -15] : [0, 0]
+                        offset: (feat.type === 'marker' || feat.type === 'candy' || feat.type === 'bunker') ? [0, -15] : [0, 0]
                     }).addTo(map);
                 }
             }
@@ -736,6 +684,7 @@ function renderLegend(hierarchy) {
             
             pinBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                if (pinnedSubCategories.has(subKey)) pinnedSubCategories.set(subKey); // Correction ici, Set utilise delete/add
                 if (pinnedSubCategories.has(subKey)) pinnedSubCategories.delete(subKey);
                 else pinnedSubCategories.add(subKey);
                 renderFeatures();
