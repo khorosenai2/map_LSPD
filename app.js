@@ -337,6 +337,44 @@ document.addEventListener('keydown', (e) => {
             resetDrawState();
         }
     }
+
+    else if (e.key === 'Enter' && editMode && !editingFeatureId) {
+        const title = elemTitle.value.trim() || 'Élément sans nom';
+        const desc = elemDesc.value.trim() || '';
+        const category = elemCategory.value.trim() || 'Général';
+        const subcategory = elemSubCategory.value.trim() || 'Général';
+        const color = elemColor.value;
+        const fill = elemFill.value;
+
+        if (selectedTool === 'rectangle' && firstClickLatLng && tempDrawLayer) {
+            const currentBounds = tempDrawLayer.getBounds();
+            savedFeatures.push({
+                id: Date.now(),
+                type: 'rectangle',
+                bounds: [
+                    [parseFloat(currentBounds.getSouthWest().lat.toFixed(2)), parseFloat(currentBounds.getSouthWest().lng.toFixed(2))],
+                    [parseFloat(currentBounds.getNorthEast().lat.toFixed(2)), parseFloat(currentBounds.getNorthEast().lng.toFixed(2))]
+                ],
+                title, desc, category, subcategory, color, fill
+            });
+            renderFeatures();
+            resetForm();
+        } 
+        else if (selectedTool === 'circle' && firstClickLatLng && tempDrawLayer) {
+            savedFeatures.push({
+                id: Date.now(),
+                type: 'circle',
+                latlng: [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))],
+                radius: parseFloat(tempDrawLayer.getRadius().toFixed(2)),
+                title, desc, category, subcategory, color, fill
+            });
+            renderFeatures();
+            resetForm();
+        }
+        else if (selectedTool === 'polygon' && polygonPoints.length >= 2) {
+            finishPolygonDrawing();
+        }
+    }
 });
 
 map.on('click', (e) => {
