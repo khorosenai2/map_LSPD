@@ -1,0 +1,2006 @@
+[
+  {
+    "id": 1779537576162,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2126,
+        3846
+      ],
+      [
+        1994,
+        3918
+      ]
+    ],
+    "title": "Place des Cubes",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779537719182,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2091,
+        3511
+      ],
+      [
+        2008,
+        3614
+      ]
+    ],
+    "title": "Parking centrale (PC)",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779537972852,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2030,
+        2958
+      ],
+      [
+        1896,
+        3162
+      ]
+    ],
+    "title": "Canaux Vespucci",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779538272637,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2568,
+        2544
+      ],
+      [
+        2450,
+        2692
+      ]
+    ],
+    "title": "Mariage",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779538326014,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2254,
+        2935
+      ],
+      [
+        2193,
+        2981.5
+      ]
+    ],
+    "title": "Parking Multicolore",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779538363872,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1837.5,
+        3300
+      ],
+      [
+        1674,
+        3092.5
+      ]
+    ],
+    "title": "Marina",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779538452445,
+    "type": "marker",
+    "latlng": [
+      1724,
+      2979.5
+    ],
+    "title": "Tatoueur plage",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779538491218,
+    "type": "marker",
+    "latlng": [
+      1929.5,
+      2908
+    ],
+    "title": "Coiffeur Plage",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779538532606,
+    "type": "marker",
+    "latlng": [
+      2155.5,
+      2801
+    ],
+    "title": "Fête Foraine",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779538692248,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2615,
+        2844.5
+      ],
+      [
+        2561,
+        2925
+      ]
+    ],
+    "title": "Terrain Tennis",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779538714569,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2225.5,
+        3517
+      ],
+      [
+        2113,
+        3582.5
+      ]
+    ],
+    "title": "Parking Rouge",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539167991,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2276,
+        3833
+      ],
+      [
+        2224.5,
+        3857
+      ]
+    ],
+    "title": "Tour FBI",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539556606,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1921.5,
+        3689.5
+      ],
+      [
+        2048,
+        3633
+      ]
+    ],
+    "title": "Chantier PC",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539572332,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2464.5,
+        3773
+      ],
+      [
+        2363.5,
+        3845.5
+      ]
+    ],
+    "title": "Chantier Cabinet Avocat",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539579458,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2426.5,
+        3881.5
+      ],
+      [
+        2362.5,
+        3944.5
+      ]
+    ],
+    "title": "Cabinet avocat",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539601550,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2224,
+        3407
+      ],
+      [
+        2129.5,
+        3465
+      ]
+    ],
+    "title": "Parking Blanc",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539623858,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2093,
+        3423.5
+      ],
+      [
+        1959.5,
+        3469.5
+      ]
+    ],
+    "title": "Chantier Weazle News",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539635379,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2058,
+        3734
+      ],
+      [
+        2171.5,
+        3671.5
+      ]
+    ],
+    "title": "Maze Bank",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539654816,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2846.5,
+        3913.5
+      ],
+      [
+        2800.5,
+        3941.5
+      ]
+    ],
+    "title": "Revo Bank",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539669410,
+    "type": "marker",
+    "latlng": [
+      2855,
+      3974
+    ],
+    "title": "Galaxie",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779539677590,
+    "type": "marker",
+    "latlng": [
+      2755.5,
+      4211.5
+    ],
+    "title": "Bennys",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779539727838,
+    "type": "marker",
+    "latlng": [
+      2570,
+      4346
+    ],
+    "title": "Taxi",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779539892232,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2652,
+        4393
+      ],
+      [
+        2721,
+        4353
+      ]
+    ],
+    "title": "Casino",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539910772,
+    "type": "rectangle",
+    "bounds": [
+      [
+        3335,
+        4753.5
+      ],
+      [
+        3453,
+        4614.5
+      ]
+    ],
+    "title": "Fuente Blanca",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779539965421,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2691.5,
+        4099.5
+      ],
+      [
+        2634,
+        4184
+      ]
+    ],
+    "title": "Ancien PDP",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540003390,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2049.38,
+        4210.08
+      ],
+      [
+        2018.38,
+        4249.08
+      ]
+    ],
+    "title": "Lester",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540133448,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1710.5,
+        4474.5
+      ],
+      [
+        1665.5,
+        4522.5
+      ]
+    ],
+    "title": "Hopital St fiacre",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540140247,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1666.5,
+        4574
+      ],
+      [
+        1711,
+        4522
+      ]
+    ],
+    "title": "Caserne Pompier",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540243559,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1736,
+        4842.5
+      ],
+      [
+        1523.5,
+        4938
+      ]
+    ],
+    "title": "Ancienne Revente Coke",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540369141,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1493,
+        4389
+      ],
+      [
+        1387,
+        4431
+      ]
+    ],
+    "title": "Fonderie",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540605748,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2117.5,
+        3139.5
+      ],
+      [
+        2069.5,
+        3194.5
+      ]
+    ],
+    "title": "Temple Chinois",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540628403,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2010.5,
+        3226
+      ],
+      [
+        1959.5,
+        3276.5
+      ]
+    ],
+    "title": "Location Scooter",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779540936195,
+    "type": "marker",
+    "latlng": [
+      2215,
+      3323
+    ],
+    "title": "Taco Bomb",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779541141872,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2289.5,
+        3348.5
+      ],
+      [
+        2242,
+        3459.5
+      ]
+    ],
+    "title": "musée",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541330361,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2106.5,
+        3343
+      ],
+      [
+        2044.5,
+        3411
+      ]
+    ],
+    "title": "Weazle News",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541347495,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2026.5,
+        3347.5
+      ],
+      [
+        1950,
+        3392
+      ]
+    ],
+    "title": "uwu café",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541429920,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1651.5,
+        3322
+      ],
+      [
+        1569,
+        3402
+      ]
+    ],
+    "title": "Zone Rouge",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541442029,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1499.5,
+        3480
+      ],
+      [
+        1572.5,
+        3416
+      ]
+    ],
+    "title": "Casse",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541453841,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1462,
+        3496
+      ],
+      [
+        1301,
+        3623.5
+      ]
+    ],
+    "title": "Maze bank arena",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541508127,
+    "type": "marker",
+    "latlng": [
+      892,
+      3696
+    ],
+    "title": "Vente Peche",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779541549248,
+    "type": "marker",
+    "latlng": [
+      638,
+      4530
+    ],
+    "title": "Revente fentanyl",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779541580795,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1516,
+        4268
+      ],
+      [
+        1054,
+        4462
+      ]
+    ],
+    "title": "Quartier Industrielle",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541603119,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1680,
+        3990
+      ],
+      [
+        1758.5,
+        3942.5
+      ]
+    ],
+    "title": "Ancienne Hôpital",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541667005,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1546.5,
+        3773.5
+      ],
+      [
+        1455,
+        3846
+      ]
+    ],
+    "title": "Megamall",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541688817,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1526,
+        3704
+      ],
+      [
+        1406.5,
+        3809.5
+      ]
+    ],
+    "title": "Quartier Ballas",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779541884187,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1990,
+        3728
+      ],
+      [
+        1928.5,
+        3785.5
+      ]
+    ],
+    "title": "Concessionnaire Cimeone",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542041301,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1835,
+        3604.5
+      ],
+      [
+        1808.5,
+        3676
+      ]
+    ],
+    "title": "ancien Bennys",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542097645,
+    "type": "marker",
+    "latlng": [
+      1757.5,
+      3913.5
+    ],
+    "title": "Auto Ecole",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779542135372,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1758,
+        3704.5
+      ],
+      [
+        1667.5,
+        3808
+      ]
+    ],
+    "title": "Quartier familis",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542163408,
+    "type": "marker",
+    "latlng": [
+      1587,
+      4020
+    ],
+    "title": "Fourrière",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779542210964,
+    "type": "rectangle",
+    "bounds": [
+      [
+        1265,
+        3971
+      ],
+      [
+        1410.5,
+        3886.5
+      ]
+    ],
+    "title": "Quartier Vagos",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542600421,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2160,
+        4597.5
+      ],
+      [
+        2464.5,
+        4325
+      ]
+    ],
+    "title": "Mirror Park",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542635048,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2144,
+        4447.5
+      ],
+      [
+        1726.5,
+        4599.5
+      ]
+    ],
+    "title": "Quartier Mara (Marabounta)",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542655903,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2308.5,
+        5449
+      ],
+      [
+        2497,
+        5345
+      ]
+    ],
+    "title": "QG Nood",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#002bd6",
+    "fill": "#2563eb",
+    "subcategory": "Lieux fréquent"
+  },
+  {
+    "id": 1779542730011,
+    "type": "marker",
+    "latlng": [
+      2977.5,
+      1806.5
+    ],
+    "title": "Bank Fleeca OUEST",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "color": "#d60000",
+    "subcategory": "Lieux Notable",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779543866378,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2786,
+        2842.5
+      ],
+      [
+        2823,
+        3025.5
+      ],
+      [
+        2594,
+        3162.5
+      ],
+      [
+        2553,
+        3071
+      ],
+      [
+        2636.5,
+        2907.5
+      ],
+      [
+        2637,
+        2839
+      ],
+      [
+        2648,
+        2827
+      ],
+      [
+        2754.5,
+        2824.5
+      ]
+    ],
+    "title": "Golf",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779561723823,
+    "type": "polygon",
+    "latlngs": [
+      [
+        518,
+        3274
+      ],
+      [
+        308,
+        3150
+      ],
+      [
+        662,
+        2432
+      ],
+      [
+        888,
+        2580
+      ],
+      [
+        886,
+        2642
+      ],
+      [
+        1248,
+        2876
+      ],
+      [
+        998,
+        3304
+      ],
+      [
+        864,
+        3238
+      ],
+      [
+        822,
+        3266
+      ],
+      [
+        662,
+        3186
+      ],
+      [
+        538,
+        3270
+      ]
+    ],
+    "title": "Aéroport",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779561813378,
+    "type": "polygon",
+    "latlngs": [
+      [
+        3060,
+        5050
+      ],
+      [
+        3246,
+        5018
+      ],
+      [
+        3168,
+        5164
+      ],
+      [
+        2882,
+        5264
+      ],
+      [
+        2618,
+        4990
+      ],
+      [
+        2626,
+        4850
+      ],
+      [
+        2712,
+        4838
+      ],
+      [
+        3072,
+        5052
+      ]
+    ],
+    "title": "Barrage",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562219314,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2826.23,
+        3403.96
+      ],
+      [
+        2864.23,
+        3209.96
+      ],
+      [
+        2920.23,
+        3219.96
+      ],
+      [
+        2902.23,
+        3401.96
+      ]
+    ],
+    "title": "Appartement A 400 Milles",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562320822,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2025.5,
+        4028.5
+      ],
+      [
+        1988.5,
+        4026
+      ],
+      [
+        1990.5,
+        4085.5
+      ],
+      [
+        2030.5,
+        4082.5
+      ]
+    ],
+    "title": "Parking anti 208",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562431136,
+    "type": "polygon",
+    "latlngs": [
+      [
+        224,
+        7372
+      ],
+      [
+        332,
+        7432
+      ],
+      [
+        264,
+        7516
+      ],
+      [
+        188,
+        7436
+      ]
+    ],
+    "title": "Villa Cayo Perico",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562644349,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2794,
+        3198.5
+      ],
+      [
+        2794,
+        3252.5
+      ],
+      [
+        2753.5,
+        3254
+      ],
+      [
+        2754.5,
+        3194.5
+      ]
+    ],
+    "title": "Villa Mickeal",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562714671,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2784,
+        2566
+      ],
+      [
+        2746,
+        2474
+      ],
+      [
+        2990,
+        2382
+      ],
+      [
+        3152,
+        2442
+      ],
+      [
+        3254,
+        2588
+      ],
+      [
+        3234,
+        2638
+      ],
+      [
+        3020,
+        2498
+      ]
+    ],
+    "title": "Richman",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779562917139,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2552.5,
+        3557.5
+      ],
+      [
+        2545,
+        3525.5
+      ],
+      [
+        2570,
+        3513
+      ],
+      [
+        2606.5,
+        3532
+      ],
+      [
+        2596.5,
+        3562.5
+      ]
+    ],
+    "title": "LS Custom",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779563027406,
+    "type": "polygon",
+    "latlngs": [
+      [
+        2802.5,
+        2344
+      ],
+      [
+        2764,
+        2243
+      ],
+      [
+        2862.5,
+        2192
+      ],
+      [
+        2873.5,
+        2218.5
+      ],
+      [
+        2918,
+        2200
+      ],
+      [
+        2929.5,
+        2222.5
+      ],
+      [
+        2962,
+        2227
+      ],
+      [
+        2961.5,
+        2247
+      ],
+      [
+        2943.5,
+        2248.5
+      ],
+      [
+        2936.5,
+        2261
+      ]
+    ],
+    "title": "CBG industies",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779576277342,
+    "type": "bunker",
+    "latlng": [
+      958.5,
+      4509.5
+    ],
+    "title": "Bunker Plage",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626656788,
+    "type": "bunker",
+    "latlng": [
+      2185.5,
+      4210
+    ],
+    "title": "Bunker Lester",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626667408,
+    "type": "bunker",
+    "latlng": [
+      3050,
+      5030
+    ],
+    "title": "Bunker barrage",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626685160,
+    "type": "bunker",
+    "latlng": [
+      3351,
+      4033
+    ],
+    "title": "Bunker Vinewood",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626705750,
+    "type": "bunker",
+    "latlng": [
+      3875,
+      4320.5
+    ],
+    "title": "Bunker Sandy shores",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626720952,
+    "type": "bunker",
+    "latlng": [
+      4505,
+      4143.5
+    ],
+    "title": "Bunker Magasin vetement Sandy Shores",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626736987,
+    "type": "bunker",
+    "latlng": [
+      4877,
+      4721
+    ],
+    "title": "Bunker Aéroport Sandy Shores",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626751727,
+    "type": "bunker",
+    "latlng": [
+      1488,
+      3359
+    ],
+    "title": "Bunker Zone rouge",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626767895,
+    "type": "bunker",
+    "latlng": [
+      7062,
+      3704.5
+    ],
+    "title": "Bunker Paleto Bay",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626779972,
+    "type": "bunker",
+    "latlng": [
+      7337,
+      1164
+    ],
+    "title": "Bunker Soulevine 1",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626793697,
+    "type": "bunker",
+    "latlng": [
+      7213,
+      1195
+    ],
+    "title": "Bunker Soulevine 2",
+    "desc": "",
+    "category": "Bunker",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626839582,
+    "type": "drogue",
+    "latlng": [
+      7492,
+      1159
+    ],
+    "title": "Récolte Soulevine",
+    "desc": "",
+    "category": "Drogues",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626855472,
+    "type": "drogue",
+    "latlng": [
+      4133,
+      4757
+    ],
+    "title": "Récolte Opium",
+    "desc": "",
+    "category": "Drogues",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779626871439,
+    "type": "drogue",
+    "latlng": [
+      675,
+      7746.5
+    ],
+    "title": "Récolte Fantanyl",
+    "desc": "",
+    "category": "Drogues",
+    "subcategory": "Général",
+    "color": "#002bd6"
+  },
+  {
+    "id": 1779653865264,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2875.5,
+        3630
+      ],
+      [
+        2841.5,
+        3673
+      ]
+    ],
+    "title": "Tekilala",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#3b82f6"
+  },
+  {
+    "id": 1779653892295,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2615,
+        3575
+      ],
+      [
+        2446.5,
+        3684.5
+      ]
+    ],
+    "title": "Rockford Plaza",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#3b82f6"
+  },
+  {
+    "id": 1779654010883,
+    "type": "rectangle",
+    "bounds": [
+      [
+        2311,
+        3617.5
+      ],
+      [
+        2226.5,
+        3686
+      ]
+    ],
+    "title": "Arcadus",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#3b82f6"
+  },
+  {
+    "id": 1779664975973,
+    "type": "polygon",
+    "latlngs": [
+      [
+        4899,
+        1888
+      ],
+      [
+        4870,
+        1948
+      ],
+      [
+        4887,
+        1995
+      ],
+      [
+        4851,
+        2063
+      ],
+      [
+        4919,
+        2183
+      ],
+      [
+        4888,
+        2232
+      ],
+      [
+        4903,
+        2239
+      ],
+      [
+        4886,
+        2263
+      ],
+      [
+        4886,
+        2352
+      ],
+      [
+        4858,
+        2403
+      ],
+      [
+        4903,
+        2460
+      ],
+      [
+        4789,
+        2660
+      ],
+      [
+        4735,
+        2638
+      ],
+      [
+        4641,
+        2651
+      ],
+      [
+        4544,
+        2688
+      ],
+      [
+        4509,
+        2713
+      ],
+      [
+        4501,
+        2702
+      ],
+      [
+        4554,
+        2658
+      ],
+      [
+        4553,
+        2647
+      ],
+      [
+        4514,
+        2627
+      ],
+      [
+        4510,
+        2568
+      ],
+      [
+        4486,
+        2547
+      ],
+      [
+        4514,
+        2421
+      ],
+      [
+        4498,
+        2368
+      ],
+      [
+        4510,
+        2346
+      ],
+      [
+        4536,
+        2339
+      ],
+      [
+        4575,
+        2273
+      ],
+      [
+        4600,
+        2225
+      ],
+      [
+        4595,
+        2172
+      ],
+      [
+        4573,
+        2146
+      ],
+      [
+        4592,
+        2109
+      ],
+      [
+        4683,
+        2083
+      ],
+      [
+        4768,
+        1934
+      ],
+      [
+        4818,
+        1899
+      ],
+      [
+        4845,
+        1857
+      ],
+      [
+        4856,
+        1856
+      ]
+    ],
+    "title": "Base militaire",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#3b82f6"
+  },
+  {
+    "id": 1779665018481,
+    "type": "polygon",
+    "latlngs": [
+      [
+        3465.5,
+        3842
+      ],
+      [
+        3446,
+        3837.5
+      ],
+      [
+        3430.5,
+        3837.5
+      ],
+      [
+        3404,
+        3844
+      ],
+      [
+        3387.5,
+        3854
+      ],
+      [
+        3381.5,
+        3861
+      ],
+      [
+        3408.5,
+        3885.5
+      ],
+      [
+        3400.5,
+        3889
+      ],
+      [
+        3408.5,
+        3930.5
+      ],
+      [
+        3465,
+        3914.5
+      ],
+      [
+        3497,
+        3915
+      ],
+      [
+        3487.5,
+        3861.5
+      ],
+      [
+        3452.5,
+        3873
+      ]
+    ],
+    "title": "Théâtre Vinewood",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#3b82f6"
+  },
+  {
+    "id": 1779665068193,
+    "type": "polygon",
+    "latlngs": [
+      [
+        3098.5,
+        4150
+      ],
+      [
+        3104.5,
+        4177
+      ],
+      [
+        3122,
+        4184.5
+      ],
+      [
+        3100.5,
+        4245
+      ],
+      [
+        3085.5,
+        4241.5
+      ],
+      [
+        3070.5,
+        4281.5
+      ],
+      [
+        3036,
+        4317
+      ],
+      [
+        3024,
+        4348.5
+      ],
+      [
+        3006,
+        4348
+      ],
+      [
+        3008.5,
+        4322.5
+      ],
+      [
+        2991,
+        4315
+      ],
+      [
+        2998,
+        4289
+      ],
+      [
+        3006,
+        4287
+      ],
+      [
+        3016.5,
+        4273.5
+      ],
+      [
+        3026,
+        4241
+      ],
+      [
+        3021.5,
+        4235
+      ],
+      [
+        3007,
+        4234
+      ],
+      [
+        2958.5,
+        4241
+      ],
+      [
+        2955,
+        4209.5
+      ],
+      [
+        2960.5,
+        4183
+      ],
+      [
+        2965,
+        4174
+      ],
+      [
+        2971,
+        4158.5
+      ],
+      [
+        2977,
+        4148
+      ],
+      [
+        2993,
+        4132.5
+      ],
+      [
+        3000,
+        4128
+      ],
+      [
+        3044,
+        4185
+      ],
+      [
+        3061,
+        4137
+      ]
+    ],
+    "title": "amphithéâtre Vinewood",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux fréquent",
+    "color": "#002bd6",
+    "fill": "#2563eb"
+  },
+  {
+    "id": 1779665631126,
+    "type": "marker",
+    "latlng": [
+      5124,
+      6085.5
+    ],
+    "title": "Fabrique de billet",
+    "desc": "",
+    "category": "Important 10-3 oraux",
+    "subcategory": "Lieux Notable",
+    "color": "#d60000",
+    "fill": "#2563eb"
+  }
+]
