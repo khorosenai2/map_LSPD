@@ -100,15 +100,6 @@ function triggerJsonDownload() {
     downloadAnchor.remove();
 }
 
-setInterval(() => {
-    if (savedFeatures.length > 0) {
-        triggerJsonDownload();
-        autosaveToast.classList.add('show');
-        setTimeout(() => {
-            autosaveToast.classList.remove('show');
-        }, 3500);
-    }
-}, 2 * 60 * 1000);
 
 jsonImporter.addEventListener('change', (e) => {
     const file = e.target.files[0];
