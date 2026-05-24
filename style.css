@@ -801,7 +801,5 @@ html, body {
 }
 
 .bunker-custom-icon {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
+    border-radius: 4px;
 }
