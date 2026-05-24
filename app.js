@@ -267,7 +267,22 @@ function saveFeatureChanges() {
         oldFeat.color = elemColor.value;
         oldFeat.fill = elemFill.value;
 
-        if (oldFeat.type !== tempEditingType) {
+        if (oldFeat.type === tempEditingType) {
+            if (tempEditingType === 'rectangle' && tempDrawLayer) {
+                const currentBounds = tempDrawLayer.getBounds();
+                oldFeat.bounds = [
+                    [parseFloat(currentBounds.getSouthWest().lat.toFixed(2)), parseFloat(currentBounds.getSouthWest().lng.toFixed(2))],
+                    [parseFloat(currentBounds.getNorthEast().lat.toFixed(2)), parseFloat(currentBounds.getNorthEast().lng.toFixed(2))]
+                ];
+            } else if (tempEditingType === 'circle' && tempDrawLayer) {
+                if (firstClickLatLng) {
+                    oldFeat.latlng = [parseFloat(firstClickLatLng.lat.toFixed(2)), parseFloat(firstClickLatLng.lng.toFixed(2))];
+                    oldFeat.radius = parseFloat(tempDrawLayer.getRadius().toFixed(2));
+                }
+            } else if (tempEditingType === 'polygon' && polygonPoints.length >= 2) {
+                oldFeat.latlngs = [...polygonPoints];
+            }
+        } else {
             oldFeat.type = tempEditingType;
             
             if (tempEditingType === 'marker' || tempEditingType === 'drogue' || tempEditingType === 'bunker') {
@@ -287,6 +302,7 @@ function saveFeatureChanges() {
         }
     }
 
+    resetDrawState();
     exitEditFeatureMode();
     renderFeatures();
     resetForm();
