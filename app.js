@@ -642,7 +642,7 @@ function renderLegend(hierarchy) {
 
         const mainTitle = document.createElement('div');
         mainTitle.className = `legend-main-title ${isCatHidden ? 'muted' : ''}`;
-        mainTitle.innerHTML = `<span>${cat}</span><small style="font-size:10px; opacity:0.6;">${isCatHidden ? '👁️ Masqué' : '👁️ Visible'}</small>`;
+        mainTitle.innerHTML = `<span>${cat}</span><small style="font-size:10px; opacity:0.6;">${isCatHidden ? ' Masqué' : ' Visible'}</small>`;
         
         mainTitle.addEventListener('click', () => {
             if (hiddenCategories.has(cat)) hiddenCategories.delete(cat);
