@@ -24,7 +24,6 @@ const normalToolGrid = document.getElementById('normalToolGrid');
 const editTypeContainer = document.getElementById('editTypeContainer');
 const editElemType = document.getElementById('editElemType');
 const shapeWarning = document.getElementById('shapeWarning');
-const autosaveToast = document.getElementById('autosaveToast');
 
 let editMode = false;
 let selectedTool = 'marker';
@@ -674,9 +673,11 @@ function renderLegend(hierarchy) {
             
             pinBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (pinnedSubCategories.has(subKey)) pinnedSubCategories.set(subKey); // Correction ici, Set utilise delete/add
-                if (pinnedSubCategories.has(subKey)) pinnedSubCategories.delete(subKey);
-                else pinnedSubCategories.add(subKey);
+                if (pinnedSubCategories.has(subKey)) {
+                    pinnedSubCategories.delete(subKey);
+                } else {
+                    pinnedSubCategories.add(subKey);
+                }
                 renderFeatures();
             });
 
